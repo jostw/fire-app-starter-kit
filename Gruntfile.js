@@ -11,6 +11,8 @@
 
 module.exports = function(grunt) {
     var app = {
+        css: "css",
+        template: "template",
         partial: "partial",
         dist: "dist"
     };
@@ -44,9 +46,9 @@ module.exports = function(grunt) {
                 },
 
                 files: {
-                    "<%= app.partial %>/head.html": "template/_head.html.slim",
-                    "<%= app.partial %>/main.html": "template/_main.html.slim",
-                    "<%= app.partial %>/foot.html": "template/_foot.html.slim"
+                    "<%= app.partial %>/head.html": "<%= app.template %>/_head.html.slim",
+                    "<%= app.partial %>/main.html": "<%= app.template %>/_main.html.slim",
+                    "<%= app.partial %>/foot.html": "<%= app.template %>/_foot.html.slim"
                 }
             }
         },
@@ -101,6 +103,10 @@ module.exports = function(grunt) {
                 force: true
             },
 
+            css: {
+                src: "<%= app.css %>/style.css"
+            },
+
             partial: {
                 src: "<%= app.partial %>"
             },
@@ -117,6 +123,39 @@ module.exports = function(grunt) {
 
             files: {
                 src: "<%= app.dist %>/index.html"
+            }
+        },
+
+        compass: {
+            options: {
+                config: "config.rb"
+            },
+
+            dev: {
+                options: {
+                    outputStyle: "compact"
+                }
+            },
+
+            dist: {
+                options: {
+                    outputStyle: "compressed"
+                }
+            }
+        },
+
+        csslint: {
+            options: {
+                csslintrc: ".csslintrc"
+            },
+
+            src: "<%= app.css %>/style.css"
+        },
+
+        copy: {
+            css: {
+                src: "<%= app.css %>/style.css",
+                dest: "<%= app.dist %>/<%= app.css %>/style.css",
             }
         }
     });
@@ -136,12 +175,14 @@ module.exports = function(grunt) {
 
     grunt.registerTask("reset", [
         "jshint:grunt",
+        "clean:css", "compass:dev", "csslint", "copy:css",
         "slim-concat",
         "htmlmin:dev", "validation", "clean:validation"
     ]);
 
     grunt.registerTask("build", [
         "jshint:grunt",
+        "clean:css", "compass:dist", "csslint", "copy:css",
         "slim-concat",
         "htmlmin:dist", "validation", "clean:validation"
     ]);
