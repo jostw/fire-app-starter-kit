@@ -1,0 +1,4 @@
+hello-project
+=============
+
+Project initializer
