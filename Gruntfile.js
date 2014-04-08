@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
             grunt: {
                 files: {
-                    src: ["Gruntfile.js"]
+                    src: "Gruntfile.js"
                 }
             }
         },
@@ -102,9 +102,21 @@ module.exports = function(grunt) {
             },
 
             partial: {
-                src: [
-                    "<%= app.partial %>"
-                ]
+                src: "<%= app.partial %>"
+            },
+
+            validation: {
+                src: "validation-status.json"
+            }
+        },
+
+        validation: {
+            options: {
+                reportpath: false
+            },
+
+            files: {
+                src: "<%= app.dist %>/index.html"
             }
         }
     });
@@ -118,13 +130,19 @@ module.exports = function(grunt) {
         "watch"
     ]);
 
+    grunt.registerTask("slim-concat", [
+        "slim:dev", "concat:main", "clean:partial",
+    ]);
+
     grunt.registerTask("reset", [
         "jshint:grunt",
-        "slim:dev", "concat:main", "htmlmin:dev", "clean:partial"
+        "slim-concat",
+        "htmlmin:dev", "validation", "clean:validation"
     ]);
 
     grunt.registerTask("build", [
         "jshint:grunt",
-        "slim:dev", "concat:main", "htmlmin:dist", "clean:partial"
+        "slim-concat",
+        "htmlmin:dist", "validation", "clean:validation"
     ]);
 };
