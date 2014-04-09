@@ -96,8 +96,12 @@ module.exports = function(grunt) {
 
         bowerInstall: {
             target: {
-                src: "<%= app.template %>/_foot.html.slim",
+                src: [
+                    "<%= app.template %>/_head.html.slim",
+                    "<%= app.template %>/_foot.html.slim"
+                ],
 
+                cwd: ".",
                 exclude: [
                     /html5shiv/,
                     /respond/

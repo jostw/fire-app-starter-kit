@@ -4,6 +4,7 @@
   "author": "jos",
   "dependencies": {
     "html5shiv": null,
-    "respond": null
+    "respond": null,
+    "normalize.css": "~3.0.1"
   }
 }
