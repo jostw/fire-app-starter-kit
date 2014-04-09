@@ -3,8 +3,8 @@
  *
  * https://github.com/jostw/hello-project
  *
- * The MIT License (MIT)
  * Copyright (c) 2014 jos
+ * Licensed under the MIT license.
  */
 
 "use strict";
@@ -169,21 +169,21 @@ module.exports = function(grunt) {
         "watch"
     ]);
 
-    grunt.registerTask("slim-concat", [
-        "slim:dev", "concat:main", "clean:partial",
-    ]);
+    grunt.registerTask("html-start", ["slim:dev", "concat:main", "clean:partial"]);
+    grunt.registerTask("html-end", ["validation", "clean:validation"]);
+
+    grunt.registerTask("html-reset", ["html-start", "htmlmin:dev", "html-end"]);
+    grunt.registerTask("html-build", ["html-start", "htmlmin:dist", "html-end"]);
 
     grunt.registerTask("reset", [
         "jshint:grunt",
         "clean:css", "compass:dev", "csslint", "copy:css",
-        "slim-concat",
-        "htmlmin:dev", "validation", "clean:validation"
+        "html-reset"
     ]);
 
     grunt.registerTask("build", [
         "jshint:grunt",
         "clean:css", "compass:dist", "csslint", "copy:css",
-        "slim-concat",
-        "htmlmin:dist", "validation", "clean:validation"
+        "html-build"
     ]);
 };
