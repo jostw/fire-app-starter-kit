@@ -21,35 +21,17 @@ module.exports = function(grunt) {
         app: app,
         pkg: grunt.file.readJSON("package.json"),
 
+//  ######   ########  ##     ## ##    ## ########
+// ##    ##  ##     ## ##     ## ###   ##    ##
+// ##        ##     ## ##     ## ####  ##    ##
+// ##   #### ########  ##     ## ## ## ##    ##
+// ##    ##  ##   ##   ##     ## ##  ####    ##
+// ##    ##  ##    ##  ##     ## ##   ###    ##
+//  ######   ##     ##  #######  ##    ##    ##
+
         watch: {
             options: {
                 livereload: true
-            }
-        },
-
-        jshint: {
-            options: {
-                jshintrc: ".jshintrc"
-            },
-
-            grunt: {
-                files: {
-                    src: "Gruntfile.js"
-                }
-            }
-        },
-
-        slim: {
-            dev: {
-                options: {
-                    pretty: true
-                },
-
-                files: {
-                    "<%= app.partial %>/head.html": "<%= app.template %>/_head.html.slim",
-                    "<%= app.partial %>/main.html": "<%= app.template %>/_main.html.slim",
-                    "<%= app.partial %>/foot.html": "<%= app.template %>/_foot.html.slim"
-                }
             }
         },
 
@@ -79,22 +61,10 @@ module.exports = function(grunt) {
             }
         },
 
-        htmlmin: {
-            dev: {
-                files: {
-                    "<%= app.dist %>/index.html": "<%= app.dist %>/index.html"
-                }
-            },
-
-            dist: {
-                options: {
-                    removeComments: true,
-                    collapseWhitespace: true
-                },
-
-                files: {
-                    "<%= app.dist %>/index.html": "<%= app.dist %>/index.html"
-                }
+        copy: {
+            css: {
+                src: "<%= app.css %>/style.css",
+                dest: "<%= app.dist %>/<%= app.css %>/style.css",
             }
         },
 
@@ -116,6 +86,58 @@ module.exports = function(grunt) {
             }
         },
 
+// ##     ## ######## ##     ## ##
+// ##     ##    ##    ###   ### ##
+// ##     ##    ##    #### #### ##
+// #########    ##    ## ### ## ##
+// ##     ##    ##    ##     ## ##
+// ##     ##    ##    ##     ## ##
+// ##     ##    ##    ##     ## ########
+
+        bowerInstall: {
+            target: {
+                src: "<%= app.template %>/_foot.html.slim",
+
+                exclude: [
+                    /html5shiv/,
+                    /respond/
+                ]
+            }
+        },
+
+        slim: {
+            dev: {
+                options: {
+                    pretty: true
+                },
+
+                files: {
+                    "<%= app.partial %>/head.html": "<%= app.template %>/_head.html.slim",
+                    "<%= app.partial %>/main.html": "<%= app.template %>/_main.html.slim",
+                    "<%= app.partial %>/foot.html": "<%= app.template %>/_foot.html.slim"
+                }
+            }
+        },
+
+        htmlmin: {
+            dev: {
+                files: {
+                    "<%= app.dist %>/index.html": "<%= app.dist %>/index.html"
+                }
+            },
+
+            dist: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+
+                files: {
+                    "<%= app.dist %>/index.html": "<%= app.dist %>/index.html"
+                }
+            }
+        },
+
         validation: {
             options: {
                 reportpath: false
@@ -125,6 +147,14 @@ module.exports = function(grunt) {
                 src: "<%= app.dist %>/index.html"
             }
         },
+
+//  ######   ######   ######
+// ##    ## ##    ## ##    ##
+// ##       ##       ##
+// ##        ######   ######
+// ##             ##       ##
+// ##    ## ##    ## ##    ##
+//  ######   ######   ######
 
         compass: {
             options: {
@@ -152,21 +182,23 @@ module.exports = function(grunt) {
             src: "<%= app.css %>/style.css"
         },
 
-        copy: {
-            css: {
-                src: "<%= app.css %>/style.css",
-                dest: "<%= app.dist %>/<%= app.css %>/style.css",
-            }
-        },
+//       ##  ######
+//       ## ##    ##
+//       ## ##
+//       ##  ######
+// ##    ##       ##
+// ##    ## ##    ##
+//  ######   ######
 
-        bowerInstall: {
-            target: {
-                src: "<%= app.template %>/_foot.html.slim",
+        jshint: {
+            options: {
+                jshintrc: ".jshintrc"
+            },
 
-                exclude: [
-                    /html5shiv/,
-                    /respond/
-                ]
+            grunt: {
+                files: {
+                    src: "Gruntfile.js"
+                }
             }
         }
     });
@@ -174,11 +206,13 @@ module.exports = function(grunt) {
     // Load the plugins.
     require("load-grunt-tasks")(grunt);
 
-    // Default task(s).
-    grunt.registerTask("default", [
-        "jshint:grunt",
-        "watch"
-    ]);
+// ##     ## ######## ##     ## ##               ########    ###     ######  ##    ##  ######
+// ##     ##    ##    ###   ### ##                  ##      ## ##   ##    ## ##   ##  ##    ##
+// ##     ##    ##    #### #### ##                  ##     ##   ##  ##       ##  ##   ##
+// #########    ##    ## ### ## ##       #######    ##    ##     ##  ######  #####     ######
+// ##     ##    ##    ##     ## ##                  ##    #########       ## ##  ##         ##
+// ##     ##    ##    ##     ## ##                  ##    ##     ## ##    ## ##   ##  ##    ##
+// ##     ##    ##    ##     ## ########            ##    ##     ##  ######  ##    ##  ######
 
     grunt.registerTask("html-start", ["bowerInstall", "slim:dev", "concat:main", "clean:partial"]);
     grunt.registerTask("html-end", ["validation", "clean:validation"]);
@@ -186,15 +220,42 @@ module.exports = function(grunt) {
     grunt.registerTask("html-reset", ["html-start", "htmlmin:dev", "html-end"]);
     grunt.registerTask("html-build", ["html-start", "htmlmin:dist", "html-end"]);
 
+//  ######   ######   ######          ########    ###     ######  ##    ##  ######
+// ##    ## ##    ## ##    ##            ##      ## ##   ##    ## ##   ##  ##    ##
+// ##       ##       ##                  ##     ##   ##  ##       ##  ##   ##
+// ##        ######   ######  #######    ##    ##     ##  ######  #####     ######
+// ##             ##       ##            ##    #########       ## ##  ##         ##
+// ##    ## ##    ## ##    ##            ##    ##     ## ##    ## ##   ##  ##    ##
+//  ######   ######   ######             ##    ##     ##  ######  ##    ##  ######
+
+    grunt.registerTask("css-start", ["clean:css"]);
+    grunt.registerTask("css-end", ["csslint", "copy:css"]);
+
+    grunt.registerTask("css-reset", ["css-start", "compass:dev", "css-end"]);
+    grunt.registerTask("css-build", ["css-start", "compass:dist", "css-end"]);
+
+// ########    ###     ######  ##    ##  ######
+//    ##      ## ##   ##    ## ##   ##  ##    ##
+//    ##     ##   ##  ##       ##  ##   ##
+//    ##    ##     ##  ######  #####     ######
+//    ##    #########       ## ##  ##         ##
+//    ##    ##     ## ##    ## ##   ##  ##    ##
+//    ##    ##     ##  ######  ##    ##  ######
+
+    grunt.registerTask("default", [
+        "jshint:grunt",
+        "watch"
+    ]);
+
     grunt.registerTask("reset", [
         "jshint:grunt",
-        "clean:css", "compass:dev", "csslint", "copy:css",
+        "css-reset",
         "html-reset"
     ]);
 
     grunt.registerTask("build", [
         "jshint:grunt",
-        "clean:css", "compass:dist", "csslint", "copy:css",
+        "css-build",
         "html-build"
     ]);
 };
