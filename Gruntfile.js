@@ -12,6 +12,7 @@
 module.exports = function(grunt) {
     var app = {
         css: "css",
+        js: "js",
         template: "template",
         partial: "partial",
         dist: "dist"
@@ -203,6 +204,12 @@ module.exports = function(grunt) {
                 files: {
                     src: "Gruntfile.js"
                 }
+            },
+
+            js: {
+                files: {
+                    src: "<%= app.js %>/script.js"
+                }
             }
         }
     });
@@ -238,6 +245,19 @@ module.exports = function(grunt) {
     grunt.registerTask("css-reset", ["css-start", "compass:dev", "css-end"]);
     grunt.registerTask("css-build", ["css-start", "compass:dist", "css-end"]);
 
+//       ##  ######          ########    ###     ######  ##    ##  ######
+//       ## ##    ##            ##      ## ##   ##    ## ##   ##  ##    ##
+//       ## ##                  ##     ##   ##  ##       ##  ##   ##
+//       ##  ######  #######    ##    ##     ##  ######  #####     ######
+// ##    ##       ##            ##    #########       ## ##  ##         ##
+// ##    ## ##    ##            ##    ##     ## ##    ## ##   ##  ##    ##
+//  ######   ######             ##    ##     ##  ######  ##    ##  ######
+
+    grunt.registerTask("js-start", ["jshint:js"]);
+
+    grunt.registerTask("js-reset", ["js-start"]);
+    grunt.registerTask("js-build", ["js-start"]);
+
 // ########    ###     ######  ##    ##  ######
 //    ##      ## ##   ##    ## ##   ##  ##    ##
 //    ##     ##   ##  ##       ##  ##   ##
@@ -246,20 +266,8 @@ module.exports = function(grunt) {
 //    ##    ##     ## ##    ## ##   ##  ##    ##
 //    ##    ##     ##  ######  ##    ##  ######
 
-    grunt.registerTask("default", [
-        "jshint:grunt",
-        "watch"
-    ]);
+    grunt.registerTask("default", ["jshint:grunt", "watch"]);
 
-    grunt.registerTask("reset", [
-        "jshint:grunt",
-        "css-reset",
-        "html-reset"
-    ]);
-
-    grunt.registerTask("build", [
-        "jshint:grunt",
-        "css-build",
-        "html-build"
-    ]);
+    grunt.registerTask("reset", ["jshint:grunt", "css-reset", "js-reset", "html-reset"]);
+    grunt.registerTask("build", ["jshint:grunt", "css-build", "js-build", "html-build"]);
 };
