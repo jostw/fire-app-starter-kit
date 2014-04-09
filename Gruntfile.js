@@ -157,6 +157,17 @@ module.exports = function(grunt) {
                 src: "<%= app.css %>/style.css",
                 dest: "<%= app.dist %>/<%= app.css %>/style.css",
             }
+        },
+
+        bowerInstall: {
+            target: {
+                src: "<%= app.template %>/_foot.html.slim",
+
+                exclude: [
+                    /html5shiv/,
+                    /respond/
+                ]
+            }
         }
     });
 
@@ -169,7 +180,7 @@ module.exports = function(grunt) {
         "watch"
     ]);
 
-    grunt.registerTask("html-start", ["slim:dev", "concat:main", "clean:partial"]);
+    grunt.registerTask("html-start", ["bowerInstall", "slim:dev", "concat:main", "clean:partial"]);
     grunt.registerTask("html-end", ["validation", "clean:validation"]);
 
     grunt.registerTask("html-reset", ["html-start", "htmlmin:dev", "html-end"]);
