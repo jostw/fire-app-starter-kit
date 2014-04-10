@@ -21,7 +21,9 @@ module.exports = function(grunt) {
         },
 
         folder: {
+            scss: "scss",
             css: "css",
+
             js: "js",
 
             template: "template",
@@ -39,7 +41,9 @@ module.exports = function(grunt) {
 
             head: "_head.html.slim",
             main: "_main.html.slim",
-            foot: "_foot.html.slim"
+            foot: "_foot.html.slim",
+
+            livereload: "_livereload.html.slim"
         },
 
         file: {
@@ -54,6 +58,8 @@ module.exports = function(grunt) {
             head: "head.html",
             main: "main.html",
             foot: "foot.html",
+
+            livereload: "livereload.html",
 
             index: "index.html"
         },
@@ -95,6 +101,21 @@ module.exports = function(grunt) {
         watch: {
             options: {
                 livereload: true
+            },
+
+            scss: {
+                files: "<%= app.folder.scss %>/**/*.scss",
+                tasks: ["css-init", "css-lint"]
+            },
+
+            js: {
+                files: "<%= app.folder.js %>/**/*.js",
+                tasks: ["js-init", "js-lint"]
+            },
+
+            template: {
+                files: ["*.slim", "<%= app.folder.template %>/*.slim"],
+                tasks: ["html-watch", "html-lint"]
             }
         },
 
@@ -130,6 +151,36 @@ module.exports = function(grunt) {
 
                     "<%= app.folder.partial %>/<%= app.file.foot %>",
                     "<%= app.folder.partial %>/<%= app.file.script %>"
+                ],
+
+                dest: "<%= app.folder.dist %>/<%= app.file.index %>"
+            },
+
+            watch: {
+                options: {
+                    banner: "<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n",
+
+                    process: function(src, filepath) {
+                        if(filepath.match(app.regex.main)) {
+                            src = "</head>\n<body>\n"+ src;
+                        }
+
+                        return src;
+                    },
+
+                    footer: "</body>\n</html>\n"
+                },
+
+                src: [
+                    "<%= app.folder.partial %>/<%= app.file.head %>",
+                    "<%= app.folder.partial %>/<%= app.file.style %>",
+
+                    "<%= app.folder.partial %>/<%= app.file.main %>",
+
+                    "<%= app.folder.partial %>/<%= app.file.foot %>",
+                    "<%= app.folder.partial %>/<%= app.file.script %>",
+
+                    "<%= app.folder.partial %>/<%= app.file.livereload %>"
                 ],
 
                 dest: "<%= app.folder.dist %>/<%= app.file.index %>"
@@ -327,7 +378,9 @@ module.exports = function(grunt) {
 
                     "<%= app.folder.partial %>/<%= app.file.head %>": "<%= app.folder.template %>/<%= app.template.head %>",
                     "<%= app.folder.partial %>/<%= app.file.main %>": "<%= app.folder.template %>/<%= app.template.main %>",
-                    "<%= app.folder.partial %>/<%= app.file.foot %>": "<%= app.folder.template %>/<%= app.template.foot %>"
+                    "<%= app.folder.partial %>/<%= app.file.foot %>": "<%= app.folder.template %>/<%= app.template.foot %>",
+
+                    "<%= app.folder.partial %>/<%= app.file.livereload %>": "<%= app.folder.template %>/<%= app.template.livereload %>"
                 }
             }
         },
@@ -449,8 +502,11 @@ module.exports = function(grunt) {
      *     - Concat partial html files into a single html file
      *     - Remove redudant code in the html file
      *     - Remove partial html files
+     *
+     *     * html-watch task added livereload.js to html
      */
     grunt.registerTask("html-init", ["slim:dev", "concat:main", "htmlmin:dev", "clean:partial"]);
+    grunt.registerTask("html-watch", ["slim:dev", "concat:watch", "htmlmin:dev", "clean:partial"]);
 
     /**
      * Lint html file:
@@ -514,9 +570,10 @@ module.exports = function(grunt) {
     /**
      * Default task:
      *     - Lint Gruntfile.js
+     *     - html-watch task
      *     - Watch files
      */
-    grunt.registerTask("default", ["jshint:grunt", "watch"]);
+    grunt.registerTask("default", ["jshint:grunt", "html-watch", "watch"]);
 
     /**
      * Clear task:
