@@ -1,2 +1,5 @@
-.sass-cache/
+# Sublime Text
+sftp-config.json
 
+# Compass
+.sass-cache/
