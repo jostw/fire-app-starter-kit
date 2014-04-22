@@ -104,9 +104,14 @@ module.exports = function(grunt) {
                 livereload: true
             },
 
-            css: {
-                files: ["<%= app.folder.scss %>/**/*.scss", "<%= app.folder.stylus %>/**/*.styl"],
+            scss: {
+                files: ["<%= app.folder.scss %>/**/*.scss"],
                 tasks: ["css-init", "css-lint"]
+            },
+
+            stylus: {
+                files: ["<%= app.folder.stylus %>/**/*.styl"],
+                tasks: ["css-init", "autoprefixer:dev", "css-lint"]
             },
 
             js: {
@@ -443,6 +448,12 @@ module.exports = function(grunt) {
             }
         },
 
+        autoprefixer: {
+            dev: {
+                src: "<%= app.folder.dist %>/<%= app.folder.css %>/**/*.css"
+            }
+        },
+
         csslint: {
             options: {
                 csslintrc: "<%= app.config.csslint %>"
@@ -522,7 +533,7 @@ module.exports = function(grunt) {
      *     - Remove redudant code in the html file
      *     - Remove partial html files
      *
-     *     * html-watch task added livereload.js to html
+     *     * Add livereload.js to html when using html-watch task
      */
     grunt.registerTask("html-init", ["slim:dev", "concat:main", "htmlmin:dev", "clean:partial"]);
     grunt.registerTask("html-watch", ["slim:dev", "concat:watch", "htmlmin:dev", "clean:partial"]);
@@ -568,8 +579,13 @@ module.exports = function(grunt) {
      *     - Copy files in temp folder to distribution folder
      *     - Remove vendor folder in distribution folder
      *     - Remove temp folder
+     *
+     *     * Add vendor prefix with autoprefixer when using stylus
      */
     grunt.registerTask("usemin-prepare", ["useminPrepare", "concat:generated", "copy:temp", "clean:vendor", "clean:temp"]);
+
+    grunt.registerTask("usemin-prepare-compass", ["usemin-prepare"]);
+    grunt.registerTask("usemin-prepare-stylus", ["usemin-prepare", "autoprefixer:dev"]);
 
     /**
      * Usemin replace:
@@ -609,8 +625,13 @@ module.exports = function(grunt) {
      *     - Create css file
      *     - Create js file
      *     - Creat html file
+     *
+     *     * Add vendor prefix with autoprefixer when using stylus
      */
     grunt.registerTask("init", ["jshint:grunt", "clear", "copy:vendor", "css-init", "js-init", "html-init"]);
+
+    grunt.registerTask("init-compass", ["init"]);
+    grunt.registerTask("init-stylus", ["init", "autoprefixer:dev"]);
 
     /**
      * Reset task:
@@ -619,7 +640,7 @@ module.exports = function(grunt) {
      *     - Lint js file
      *     - Lint html file
      */
-    grunt.registerTask("reset", ["init", "css-lint", "js-lint", "html-lint"]);
+    grunt.registerTask("reset", ["init-"+ preprocessor, "css-lint", "js-lint", "html-lint"]);
 
     /**
      * Build task:
@@ -633,7 +654,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask("build", [
         "init",
-        "usemin-prepare", "usemin-replace",
+        "usemin-prepare-"+ preprocessor, "usemin-replace",
         "htmlmin:dev", "html-lint"
     ]);
 
@@ -651,7 +672,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask("min", [
         "init",
-        "usemin-prepare",
+        "usemin-prepare-"+ preprocessor,
         "cssmin:dist", "uglify:dist",
         "usemin-replace",
         "htmlmin:dist", "html-lint"
