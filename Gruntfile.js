@@ -20,6 +20,8 @@ module.exports = function(grunt) {
             jshint: ".jshintrc"
         },
 
+        preprocessor: "compass",
+
         folder: {
             scss: "scss",
             stylus: "stylus",
@@ -359,7 +361,7 @@ module.exports = function(grunt) {
 // ##     ##    ##    ##     ## ########
 
         bowerInstall: {
-            target: {
+            dev: {
                 src: [
                     "<%= app.template.style %>",
                     "<%= app.template.script %>"
@@ -415,8 +417,10 @@ module.exports = function(grunt) {
                 reportpath: false
             },
 
-            files: {
-                src: "<%= app.folder.dist %>/<%= app.file.index %>"
+            dist: {
+                files: {
+                    src: "<%= app.folder.dist %>/<%= app.file.index %>"
+                }
             }
         },
 
@@ -449,7 +453,7 @@ module.exports = function(grunt) {
         },
 
         autoprefixer: {
-            dev: {
+            dist: {
                 src: "<%= app.folder.dist %>/<%= app.folder.css %>/**/*.css"
             }
         },
@@ -459,7 +463,9 @@ module.exports = function(grunt) {
                 csslintrc: "<%= app.config.csslint %>"
             },
 
-            src: "<%= app.folder.dist %>/<%= app.folder.css %>/<%= app.file.css %>"
+            dist: {
+                src: "<%= app.folder.dist %>/<%= app.folder.css %>/<%= app.file.css %>"
+            }
         },
 
         cssmin: {
@@ -524,7 +530,7 @@ module.exports = function(grunt) {
      * Usage: grunt [task] [--pre=stylus]
      *     - Use compass as default preprocessor
      */
-    var preprocessor = grunt.option("pre") || "compass";
+    var preprocessor = grunt.option("pre") || app.preprocessor;
 
     /**
      * Create html file:
@@ -543,7 +549,7 @@ module.exports = function(grunt) {
      *     - Validate the html file
      *     - Remove the validation results file
      */
-    grunt.registerTask("html-lint", ["validation", "clean:validation"]);
+    grunt.registerTask("html-lint", ["validation:dist", "clean:validation"]);
 
     /**
      * Create css file:
@@ -557,7 +563,7 @@ module.exports = function(grunt) {
      * Lint css file:
      *     - Lint css file in distribution folder
      */
-    grunt.registerTask("css-lint", ["csslint"]);
+    grunt.registerTask("css-lint", ["csslint:dist"]);
 
     /**
      * Create js file:
@@ -585,7 +591,7 @@ module.exports = function(grunt) {
     grunt.registerTask("usemin-prepare", ["useminPrepare", "concat:generated", "copy:temp", "clean:vendor", "clean:temp"]);
 
     grunt.registerTask("usemin-prepare-compass", ["usemin-prepare"]);
-    grunt.registerTask("usemin-prepare-stylus", ["usemin-prepare", "autoprefixer:dev"]);
+    grunt.registerTask("usemin-prepare-stylus", ["usemin-prepare", "autoprefixer:dist"]);
 
     /**
      * Usemin replace:
@@ -615,7 +621,7 @@ module.exports = function(grunt) {
      *     - Remove all generated files
      *     - Insert bower files into slim templates
      */
-    grunt.registerTask("clear", ["clean:all", "bowerInstall"]);
+    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev"]);
 
     /**
      * Init task:
@@ -631,7 +637,7 @@ module.exports = function(grunt) {
     grunt.registerTask("init", ["jshint:grunt", "clear", "copy:vendor", "css-init", "js-init", "html-init"]);
 
     grunt.registerTask("init-compass", ["init"]);
-    grunt.registerTask("init-stylus", ["init", "autoprefixer:dev"]);
+    grunt.registerTask("init-stylus", ["init", "autoprefixer:dist"]);
 
     /**
      * Reset task:
