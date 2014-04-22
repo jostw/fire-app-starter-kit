@@ -22,8 +22,9 @@ module.exports = function(grunt) {
 
         folder: {
             scss: "scss",
-            css: "css",
+            stylus: "stylus",
 
+            css: "css",
             js: "js",
 
             template: "template",
@@ -103,8 +104,8 @@ module.exports = function(grunt) {
                 livereload: true
             },
 
-            scss: {
-                files: "<%= app.folder.scss %>/**/*.scss",
+            css: {
+                files: ["<%= app.folder.scss %>/**/*.scss", "<%= app.folder.stylus %>/**/*.styl"],
                 tasks: ["css-init", "css-lint"]
             },
 
@@ -430,6 +431,18 @@ module.exports = function(grunt) {
             }
         },
 
+        stylus: {
+            options: {
+                compress: false
+            },
+
+            dev: {
+                files: {
+                    "<%= app.folder.css %>/<%= app.file.css %>": "<%= app.folder.stylus %>/**/*.styl"
+                }
+            }
+        },
+
         csslint: {
             options: {
                 csslintrc: "<%= app.config.csslint %>"
@@ -497,6 +510,12 @@ module.exports = function(grunt) {
 //  ######   #######  ########     ##    ##     ##  ######  ##    ##  ######
 
     /**
+     * Usage: grunt [task] [--pre=stylus]
+     *     - Use compass as default preprocessor
+     */
+    var preprocessor = grunt.option("pre") || "compass";
+
+    /**
      * Create html file:
      *     - Create partial html files from slim templates
      *     - Concat partial html files into a single html file
@@ -517,11 +536,11 @@ module.exports = function(grunt) {
 
     /**
      * Create css file:
-     *     - Create a css file from scss files
+     *     - Create a css file from scss/stylus files
      *     - Copy the css file to distribution folder
      *     - Remove the original css file
      */
-    grunt.registerTask("css-init", ["compass:dev", "copy:css", "clean:css"]);
+    grunt.registerTask("css-init", [preprocessor +":dev", "copy:css", "clean:css"]);
 
     /**
      * Lint css file:
