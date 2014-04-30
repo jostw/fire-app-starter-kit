@@ -25,5 +25,5 @@ gulp.task("default", function() {
 gulp.task("jshint:gulp", function() {
     return gulp.src(app.file.gulp)
                .pipe(plugins.jshint(".jshintrc"))
-               .pipe(plugins.jshint.reporter());
+               .pipe(plugins.jshint.reporter("jshint-stylish"));
 });
