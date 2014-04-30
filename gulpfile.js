@@ -13,17 +13,29 @@ var gulp = require("gulp"),
     plugins = require("gulp-load-plugins")(),
 
     app = {
+        folder: {
+            dist: "dist"
+        },
+
         file: {
             gulp: "gulpfile.js"
         }
     };
 
-gulp.task("default", function() {
+gulp.task("watch", function() {
+    var server = plugins.livereload();
 
+    gulp.watch([app.folder.dist +"/**"]).on("change", function(file) {
+        server.changed(file.path);
+    });
 });
 
 gulp.task("jshint:gulp", function() {
     return gulp.src(app.file.gulp)
                .pipe(plugins.jshint(".jshintrc"))
                .pipe(plugins.jshint.reporter("jshint-stylish"));
+});
+
+gulp.task("default", ["jshint:gulp"], function() {
+    gulp.start("watch");
 });
