@@ -10,83 +10,13 @@
 "use strict";
 
 module.exports = function(grunt) {
-    var app = {
-        config: {
-            grunt: "package.json",
+    var app = require("./project.json").app;
 
-            compass: "config.rb",
+    app.regex = {
+        "html5shiv": /html5shiv/,
+        "respond": /respond/,
 
-            csslint: ".csslintrc",
-            jshint: ".jshintrc"
-        },
-
-        preprocessor: "compass",
-
-        folder: {
-            scss: "scss",
-            stylus: "stylus",
-
-            css: "css",
-            js: "js",
-
-            template: "template",
-            partial: "partial",
-
-            vendor: "vendor",
-            temp: ".tmp",
-
-            dist: "dist"
-        },
-
-        template: {
-            style: "_style.html.slim",
-            script: "_script.html.slim",
-
-            head: "_head.html.slim",
-            main: "_main.html.slim",
-            foot: "_foot.html.slim",
-
-            livereload: "_livereload.html.slim"
-        },
-
-        file: {
-            grunt: "Gruntfile.js",
-
-            css: "style.css",
-            js: "script.js",
-
-            style: "style.html",
-            script: "script.html",
-
-            head: "head.html",
-            main: "main.html",
-            foot: "foot.html",
-
-            livereload: "livereload.html",
-
-            index: "index.html"
-        },
-
-        regex: {
-            html5shiv: /html5shiv/,
-            respond: /respond/,
-
-            main: /main/
-        },
-
-        vendor: {
-            html5shiv: {
-                path: "html5shiv/dist/",
-                file: "html5shiv.js"
-            },
-
-            respond: {
-                path: "respond/dest/",
-                file: "respond.min.js"
-            },
-
-            validation: "validation-status.json"
-        }
+        "main": /main/
     };
 
     grunt.initConfig({

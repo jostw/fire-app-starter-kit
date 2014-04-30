@@ -1,0 +1,77 @@
+{
+    "name": "hello-project",
+    "version": "0.0.1",
+    "author": "jos",
+    "app": {
+        "config": {
+            "grunt": "package.json",
+
+            "compass": "config.rb",
+
+            "csslint": ".csslintrc",
+            "jshint": ".jshintrc"
+        },
+
+        "preprocessor": "compass",
+
+        "folder": {
+            "scss": "scss",
+            "stylus": "stylus",
+
+            "css": "css",
+            "js": "js",
+
+            "template": "template",
+            "partial": "partial",
+
+            "vendor": "vendor",
+            "temp": ".tmp",
+
+            "dist": "dist"
+        },
+
+        "template": {
+            "style": "_style.html.slim",
+            "script": "_script.html.slim",
+
+            "head": "_head.html.slim",
+            "main": "_main.html.slim",
+            "foot": "_foot.html.slim",
+
+            "livereload": "_livereload.html.slim"
+        },
+
+        "file": {
+            "grunt": "Gruntfile.js",
+            "gulp": "gulpfile.js",
+
+            "css": "style.css",
+            "js": "script.js",
+
+            "style": "style.html",
+            "script": "script.html",
+
+            "head": "head.html",
+            "main": "main.html",
+            "foot": "foot.html",
+
+            "livereload": "livereload.html",
+
+            "index": "index.html"
+        },
+
+        "vendor": {
+            "html5shiv": {
+                "path": "html5shiv/dist/",
+                "file": "html5shiv.js"
+            },
+
+            "respond": {
+                "path": "respond/dest/",
+                "file": "respond.min.js"
+            },
+
+            "validation": "validation-status.json"
+        }
+    }
+}

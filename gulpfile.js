@@ -12,15 +12,7 @@
 var gulp = require("gulp"),
     plugins = require("gulp-load-plugins")(),
 
-    app = {
-        folder: {
-            dist: "dist"
-        },
-
-        file: {
-            gulp: "gulpfile.js"
-        }
-    };
+    app = require("./project.json").app;
 
 gulp.task("watch", function() {
     var server = plugins.livereload();
