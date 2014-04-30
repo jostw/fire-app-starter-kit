@@ -10,8 +10,20 @@
 "use strict";
 
 var gulp = require("gulp"),
-    plugins = require("gulp-load-plugins")();
+    plugins = require("gulp-load-plugins")(),
+
+    app = {
+        file: {
+            gulp: "gulpfile.js"
+        }
+    };
 
 gulp.task("default", function() {
 
+});
+
+gulp.task("jshint:gulp", function() {
+    return gulp.src(app.file.gulp)
+               .pipe(plugins.jshint(".jshintrc"))
+               .pipe(plugins.jshint.reporter());
 });
