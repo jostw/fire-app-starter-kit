@@ -84,6 +84,19 @@ gulp.task("concat:main", ["rename:partial"], function() {
                .pipe(gulp.dest(app.folder.dist));
 });
 
+//  ######   #######  ########  ##    ##
+// ##    ## ##     ## ##     ##  ##  ##
+// ##       ##     ## ##     ##   ####
+// ##       ##     ## ########     ##
+// ##       ##     ## ##           ##
+// ##    ## ##     ## ##           ##
+//  ######   #######  ##           ##
+
+gulp.task("copy:js", function() {
+    gulp.src(app.folder.js +"/**/*.js")
+        .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.js));
+});
+
 //  ######  ##       ########    ###    ##    ##
 // ##    ## ##       ##         ## ##   ###   ##
 // ##       ##       ##        ##   ##  ####  ##
@@ -99,6 +112,11 @@ gulp.task("clean:partial", ["concat:main"], function() {
 
 gulp.task("clean:css", ["compass:dev"], function() {
     gulp.src(app.folder.css, app.config.clean)
+        .pipe(plugins.clean());
+});
+
+gulp.task("clean:js", ["copy:js"], function() {
+    gulp.src(app.folder.js +"/"+ app.folder.vendor, app.config.clean)
         .pipe(plugins.clean());
 });
 
@@ -171,7 +189,13 @@ gulp.task("csslint:dist", function() {
 
 gulp.task("jshint:gulp", function() {
     return gulp.src(app.file.gulp)
-               .pipe(plugins.jshint(".jshintrc"))
+               .pipe(plugins.jshint(app.config.jshint))
+               .pipe(plugins.jshint.reporter("jshint-stylish"));
+});
+
+gulp.task("jshint:js", function() {
+    return gulp.src(app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js)
+               .pipe(plugins.jshint(app.config.jshint))
                .pipe(plugins.jshint.reporter("jshint-stylish"));
 });
 
@@ -185,27 +209,24 @@ gulp.task("jshint:gulp", function() {
 
 var preprocessor = yargs.argv.pre || app.preprocessor;
 
-gulp.task("html-init", function() {
-    gulp.start(
-        "slim:dev",
-        "rename:partial",
-        "concat:main",
-        "htmlmin:dev", "clean:partial"
-    );
-});
+gulp.task("html-init", [
+    "slim:dev",
+    "rename:partial",
+    "concat:main",
+    "htmlmin:dev", "clean:partial"
+]);
 
-gulp.task("html-lint", function() {
-    gulp.start("htmlhint:dist");
-});
+gulp.task("html-lint", ["htmlhint:dist"]);
 
 
-gulp.task("css-init", function() {
-    gulp.start(preprocessor +":dev", "clean:css");
-});
+gulp.task("css-init", [preprocessor +":dev", "clean:css"]);
 
-gulp.task("css-lint", function() {
-    gulp.start("csslint:dist");
-});
+gulp.task("css-lint", ["csslint:dist"]);
+
+
+gulp.task("js-init", ["copy:js", "clean:js"]);
+
+gulp.task("js-lint", ["jshint:js"]);
 
 // ########    ###     ######  ##    ##  ######
 //    ##      ## ##   ##    ## ##   ##  ##    ##
