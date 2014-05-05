@@ -10,7 +10,11 @@
 
             "htmlhint": ".htmlhintrc",
             "csslint": ".csslintrc",
-            "jshint": ".jshintrc"
+            "jshint": ".jshintrc",
+
+            "slim": {
+                "pretty": true
+            }
         },
 
         "preprocessor": "compass",

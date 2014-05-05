@@ -302,9 +302,7 @@ module.exports = function(grunt) {
 
         slim: {
             dev: {
-                options: {
-                    pretty: true
-                },
+                options: app.config.slim,
 
                 files: {
                     "<%= app.folder.partial %>/<%= app.file.style %>": "<%= app.template.style %>",
