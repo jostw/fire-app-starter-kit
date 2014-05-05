@@ -105,8 +105,14 @@ gulp.task("copy:js", function() {
 // ##    ## ##       ##       ##     ## ##   ###
 //  ######  ######## ######## ##     ## ##    ##
 
-gulp.task("clean:partial", ["concat:main"], function() {
-    gulp.src(app.folder.partial, app.config.clean)
+gulp.task("clean:all", function() {
+    gulp.src([
+            app.folder.css,
+            app.folder.js +"/"+ app.folder.vendor,
+            app.folder.partial,
+            app.folder.temp,
+            app.folder.dist
+        ], app.config.clean)
         .pipe(plugins.clean());
 });
 
@@ -117,6 +123,11 @@ gulp.task("clean:css", ["compass:dev"], function() {
 
 gulp.task("clean:js", ["copy:js"], function() {
     gulp.src(app.folder.js +"/"+ app.folder.vendor, app.config.clean)
+        .pipe(plugins.clean());
+});
+
+gulp.task("clean:partial", ["concat:main"], function() {
+    gulp.src(app.folder.partial, app.config.clean)
         .pipe(plugins.clean());
 });
 
@@ -239,3 +250,5 @@ gulp.task("js-lint", ["jshint:js"]);
 gulp.task("default", ["jshint:gulp"], function() {
     gulp.start("watch");
 });
+
+gulp.task("clear", ["clean:all"]);
