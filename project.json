@@ -8,6 +8,7 @@
 
             "compass": "config.rb",
 
+            "htmlhint": ".htmlhintrc",
             "csslint": ".csslintrc",
             "jshint": ".jshintrc"
         },

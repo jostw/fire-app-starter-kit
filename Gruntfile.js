@@ -218,10 +218,6 @@ module.exports = function(grunt) {
                 src: "<%= app.folder.partial %>"
             },
 
-            validation: {
-                src: "<%= app.vendor.validation %>"
-            },
-
             temp: {
                 src: "<%= app.folder.temp %>"
             },
@@ -342,15 +338,13 @@ module.exports = function(grunt) {
             }
         },
 
-        validation: {
+        htmlhint: {
             options: {
-                reportpath: false
+                htmlhintrc: "<%= app.config.htmlhint %>"
             },
 
             dist: {
-                files: {
-                    src: "<%= app.folder.dist %>/<%= app.file.index %>"
-                }
+                src: "<%= app.folder.dist %>/<%= app.file.index %>"
             }
         },
 
@@ -478,9 +472,8 @@ module.exports = function(grunt) {
     /**
      * Lint html file:
      *     - Validate the html file
-     *     - Remove the validation results file
      */
-    grunt.registerTask("html-lint", ["validation:dist", "clean:validation"]);
+    grunt.registerTask("html-lint", ["htmlhint:dist"]);
 
     /**
      * Create css file:
