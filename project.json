@@ -12,6 +12,10 @@
             "csslint": ".csslintrc",
             "jshint": ".jshintrc",
 
+            "clean": {
+                "force": true
+            },
+
             "slim": {
                 "pretty": true
             }

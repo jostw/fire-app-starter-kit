@@ -192,9 +192,7 @@ module.exports = function(grunt) {
 //  ######  ######## ######## ##     ## ##    ##
 
         clean: {
-            options: {
-                force: true
-            },
+            options: app.config.clean,
 
             all: {
                 src: [
