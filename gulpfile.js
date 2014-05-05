@@ -10,6 +10,8 @@
 "use strict";
 
 var gulp = require("gulp"),
+    yargs = require("yargs"),
+
     plugins = require("gulp-load-plugins")(),
 
     app = require("./project.json").app;
@@ -91,7 +93,12 @@ gulp.task("concat:main", ["rename:partial"], function() {
 //  ######  ######## ######## ##     ## ##    ##
 
 gulp.task("clean:partial", ["concat:main"], function() {
-    gulp.src(app.folder.partial, { read: false })
+    gulp.src(app.folder.partial, app.config.clean)
+        .pipe(plugins.clean());
+});
+
+gulp.task("clean:css", ["compass:dev"], function() {
+    gulp.src(app.folder.css, app.config.clean)
         .pipe(plugins.clean());
 });
 
@@ -130,6 +137,30 @@ gulp.task("htmlhint:dist", function() {
         .pipe(plugins.htmlhint.reporter());
 });
 
+//  ######   ######   ######
+// ##    ## ##    ## ##    ##
+// ##       ##       ##
+// ##        ######   ######
+// ##             ##       ##
+// ##    ## ##    ## ##    ##
+//  ######   ######   ######
+
+gulp.task("compass:dev", function() {
+    return gulp.src(app.folder.scss +"/**/*.scss")
+               .pipe(plugins.compass({
+                   config_file: app.config.compass,
+                   css: app.folder.css,
+                   sass: app.folder.scss
+               }))
+               .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
+});
+
+gulp.task("csslint:dist", function() {
+    gulp.src(app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css)
+        .pipe(plugins.csslint(app.config.csslint))
+        .pipe(plugins.csslint.reporter());
+});
+
 //       ##  ######
 //       ## ##    ##
 //       ## ##
@@ -152,6 +183,8 @@ gulp.task("jshint:gulp", function() {
 // ##    ## ##     ## ##     ##    ##    ##     ## ##    ## ##   ##  ##    ##
 //  ######   #######  ########     ##    ##     ##  ######  ##    ##  ######
 
+var preprocessor = yargs.argv.pre || app.preprocessor;
+
 gulp.task("html-init", function() {
     gulp.start(
         "slim:dev",
@@ -163,6 +196,15 @@ gulp.task("html-init", function() {
 
 gulp.task("html-lint", function() {
     gulp.start("htmlhint:dist");
+});
+
+
+gulp.task("css-init", function() {
+    gulp.start(preprocessor +":dev", "clean:css");
+});
+
+gulp.task("css-lint", function() {
+    gulp.start("csslint:dist");
 });
 
 // ########    ###     ######  ##    ##  ######
