@@ -20,7 +20,6 @@ module.exports = function(grunt) {
     };
 
     grunt.initConfig({
-        app: app,
         pkg: grunt.file.readJSON(app.config.grunt),
 
 // ##      ##    ###    ########  ######  ##     ##
@@ -37,22 +36,22 @@ module.exports = function(grunt) {
             },
 
             scss: {
-                files: ["<%= app.folder.scss %>/**/*.scss"],
+                files: app.folder.scss +"/**/*.scss",
                 tasks: ["css-init", "css-lint"]
             },
 
             stylus: {
-                files: ["<%= app.folder.stylus %>/**/*.styl"],
+                files: app.folder.stylus +"/**/*.styl",
                 tasks: ["css-init", "autoprefixer:dev", "css-lint"]
             },
 
             js: {
-                files: "<%= app.folder.js %>/**/*.js",
+                files: app.folder.js +"/**/*.js",
                 tasks: ["js-init", "js-lint"]
             },
 
             template: {
-                files: ["*.slim", "<%= app.folder.template %>/*.slim"],
+                files: ["*.slim", app.folder.template +"/*.slim"],
                 tasks: ["html-watch", "html-lint"]
             }
         },
@@ -82,16 +81,16 @@ module.exports = function(grunt) {
                 },
 
                 src: [
-                    "<%= app.folder.partial %>/<%= app.file.head %>",
-                    "<%= app.folder.partial %>/<%= app.file.style %>",
+                    app.folder.partial +"/"+ app.file.head,
+                    app.folder.partial +"/"+ app.file.style,
 
-                    "<%= app.folder.partial %>/<%= app.file.main %>",
+                    app.folder.partial +"/"+ app.file.main,
 
-                    "<%= app.folder.partial %>/<%= app.file.foot %>",
-                    "<%= app.folder.partial %>/<%= app.file.script %>"
+                    app.folder.partial +"/"+ app.file.foot,
+                    app.folder.partial +"/"+ app.file.script
                 ],
 
-                dest: "<%= app.folder.dist %>/<%= app.file.index %>"
+                dest: app.folder.dist +"/"+ app.file.index
             },
 
             watch: {
@@ -110,18 +109,18 @@ module.exports = function(grunt) {
                 },
 
                 src: [
-                    "<%= app.folder.partial %>/<%= app.file.head %>",
-                    "<%= app.folder.partial %>/<%= app.file.style %>",
+                    app.folder.partial +"/"+ app.file.head,
+                    app.folder.partial +"/"+ app.file.style,
 
-                    "<%= app.folder.partial %>/<%= app.file.main %>",
+                    app.folder.partial +"/"+ app.file.main,
 
-                    "<%= app.folder.partial %>/<%= app.file.foot %>",
-                    "<%= app.folder.partial %>/<%= app.file.script %>",
+                    app.folder.partial +"/"+ app.file.foot,
+                    app.folder.partial +"/"+ app.file.script,
 
-                    "<%= app.folder.partial %>/<%= app.file.livereload %>"
+                    app.folder.partial +"/"+ app.file.livereload
                 ],
 
-                dest: "<%= app.folder.dist %>/<%= app.file.index %>"
+                dest: app.folder.dist +"/"+ app.file.index
             }
         },
 
@@ -137,47 +136,39 @@ module.exports = function(grunt) {
             vendor: {
                 files: [
                     {
-                        src: "<%= app.folder.vendor %>/**/*.css",
-                        dest: "<%= app.folder.dist %>/"
+                        src: app.folder.vendor +"/**/*.css",
+                        dest: app.folder.dist +"/"
                     }, {
-                        src: "<%= app.folder.vendor %>/**/*.js",
-                        dest: "<%= app.folder.dist %>/"
+                        src: app.folder.vendor +"/**/*.js",
+                        dest: app.folder.dist +"/"
                     }, {
-                        expand: true,
-                        cwd: "<%= app.folder.vendor %>/<%= app.vendor.html5shiv.path %>",
-                        src: "<%= app.vendor.html5shiv.file %>",
-                        dest: "<%= app.folder.js %>/<%= app.folder.vendor %>/"
+                        src: app.folder.vendor +"/"+ app.vendor.html5shiv.path +"/"+ app.vendor.html5shiv.file,
+                        dest: app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.html5shiv.file
                     }, {
-                        expand: true,
-                        cwd: "<%= app.folder.vendor %>/<%= app.vendor.respond.path %>",
-                        src: "<%= app.vendor.respond.file %>",
-                        dest: "<%= app.folder.js %>/<%= app.folder.vendor %>/"
+                        src: app.folder.vendor +"/"+ app.vendor.respond.path +"/"+ app.vendor.respond.file,
+                        dest: app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.respond.file
                     }
                 ]
             },
 
             css: {
-                src: "<%= app.folder.css %>/**/*.css",
-                dest: "<%= app.folder.dist %>/"
+                src: app.folder.css +"/**/*.css",
+                dest: app.folder.dist +"/"
             },
 
             js: {
-                src: "<%= app.folder.js %>/**/*.js",
-                dest: "<%= app.folder.dist %>/"
+                src: app.folder.js +"/**/*.js",
+                dest: app.folder.dist +"/"
             },
 
             temp: {
                 files: [
                     {
-                        expand: true,
-                        cwd: "<%= app.folder.temp %>/concat/<%= app.folder.css %>/",
-                        src: "<%= app.file.css %>",
-                        dest: "<%= app.folder.dist %>/<%= app.folder.css %>/"
+                        src: app.folder.temp +"/concat/"+ app.folder.css +"/"+ app.file.css,
+                        dest: app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css
                     }, {
-                        expand: true,
-                        cwd: "<%= app.folder.temp %>/concat/<%= app.folder.js %>/",
-                        src: "<%= app.file.js %>",
-                        dest: "<%= app.folder.dist %>/<%= app.folder.js %>/"
+                        src: app.folder.temp +"/concat/"+ app.folder.js +"/"+ app.file.js,
+                        dest: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
                     }
                 ]
             }
@@ -196,34 +187,32 @@ module.exports = function(grunt) {
 
             all: {
                 src: [
-                    "<%= app.folder.css %>",
-                    "<%= app.folder.js %>/<%= app.folder.vendor %>",
-                    "<%= app.folder.partial %>",
-                    "<%= app.folder.temp %>",
-                    "<%= app.folder.dist %>"
+                    app.folder.css,
+                    app.folder.js +"/"+ app.folder.vendor,
+                    app.folder.partial,
+                    app.folder.temp,
+                    app.folder.dist
                 ]
             },
 
             css: {
-                src: "<%= app.folder.css %>"
+                src: app.folder.css
             },
 
             js: {
-                src: "<%= app.folder.js %>/<%= app.folder.vendor %>"
+                src: app.folder.js +"/"+ app.folder.vendor
             },
 
             partial: {
-                src: "<%= app.folder.partial %>"
+                src: app.folder.partial
             },
 
             temp: {
-                src: "<%= app.folder.temp %>"
+                src: app.folder.temp
             },
 
             vendor: {
-                src: [
-                    "<%= app.folder.dist %>/<%= app.folder.vendor %>"
-                ]
+                src: app.folder.dist +"/"+ app.folder.vendor
             }
         },
 
@@ -243,12 +232,10 @@ module.exports = function(grunt) {
             },
 
             dist: {
-                files: {
-                    src: [
-                        "<%= app.folder.dist %>/<%= app.folder.css %>/<%= app.file.css %>",
-                        "<%= app.folder.dist %>/<%= app.folder.js %>/<%= app.file.js %>"
-                    ]
-                }
+                src: [
+                    app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css,
+                    app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
+                ]
             }
         },
 
@@ -262,18 +249,18 @@ module.exports = function(grunt) {
 
         useminPrepare: {
             options: {
-                dest: "<%= app.folder.dist %>"
+                dest: app.folder.dist
             },
 
-            html: "<%= app.folder.dist %>/<%= app.file.index %>"
+            html: app.folder.dist +"/"+ app.file.index
         },
 
         usemin: {
             options: {
-                assetsDirs: ["<%= app.folder.dist %>"]
+                assetsDirs: app.folder.dist
             },
 
-            html: ["<%= app.folder.dist %>/<%= app.file.index %>"]
+            html: app.folder.dist +"/"+ app.file.index
         },
 
 // ##     ## ######## ##     ## ##
@@ -287,13 +274,13 @@ module.exports = function(grunt) {
         bowerInstall: {
             dev: {
                 src: [
-                    "<%= app.template.style %>",
-                    "<%= app.template.script %>"
+                    app.template.style,
+                    app.template.script
                 ],
 
                 exclude: [
-                    "<%= app.regex.html5shiv %>",
-                    "<%= app.regex.respond %>"
+                    app.regex.html5shiv,
+                    app.regex.respond
                 ]
             }
         },
@@ -302,24 +289,34 @@ module.exports = function(grunt) {
             dev: {
                 options: app.config.slim,
 
-                files: {
-                    "<%= app.folder.partial %>/<%= app.file.style %>": "<%= app.template.style %>",
-                    "<%= app.folder.partial %>/<%= app.file.script %>": "<%= app.template.script %>",
-
-                    "<%= app.folder.partial %>/<%= app.file.head %>": "<%= app.folder.template %>/<%= app.template.head %>",
-                    "<%= app.folder.partial %>/<%= app.file.main %>": "<%= app.folder.template %>/<%= app.template.main %>",
-                    "<%= app.folder.partial %>/<%= app.file.foot %>": "<%= app.folder.template %>/<%= app.template.foot %>",
-
-                    "<%= app.folder.partial %>/<%= app.file.livereload %>": "<%= app.folder.template %>/<%= app.template.livereload %>"
-                }
+                files: [
+                    {
+                        src: app.template.style,
+                        dest: app.folder.partial +"/"+ app.file.style
+                    }, {
+                        src: app.template.script,
+                        dest: app.folder.partial +"/"+ app.file.script
+                    }, {
+                        src: app.folder.template +"/"+ app.template.head,
+                        dest: app.folder.partial +"/"+ app.file.head
+                    }, {
+                        src: app.folder.template +"/"+ app.template.main,
+                        dest: app.folder.partial +"/"+ app.file.main
+                    }, {
+                        src: app.folder.template +"/"+ app.template.foot,
+                        dest: app.folder.partial +"/"+ app.file.foot
+                    }, {
+                        src: app.folder.template +"/"+ app.template.livereload,
+                        dest: app.folder.partial +"/"+ app.file.livereload
+                    }
+                ]
             }
         },
 
         htmlmin: {
             dev: {
-                files: {
-                    "<%= app.folder.dist %>/<%= app.file.index %>": "<%= app.folder.dist %>/<%= app.file.index %>"
-                }
+                src: app.folder.dist +"/"+ app.file.index,
+                dest: app.folder.dist +"/"+ app.file.index
             },
 
             dist: {
@@ -328,19 +325,18 @@ module.exports = function(grunt) {
                     collapseWhitespace: true
                 },
 
-                files: {
-                    "<%= app.folder.dist %>/<%= app.file.index %>": "<%= app.folder.dist %>/<%= app.file.index %>"
-                }
+                src: app.folder.dist +"/"+ app.file.index,
+                dest: app.folder.dist +"/"+ app.file.index
             }
         },
 
         htmlhint: {
             options: {
-                htmlhintrc: "<%= app.config.htmlhint %>"
+                htmlhintrc: app.config.htmlhint
             },
 
             dist: {
-                src: "<%= app.folder.dist %>/<%= app.file.index %>"
+                src: app.folder.dist +"/"+ app.file.index
             }
         },
 
@@ -355,7 +351,7 @@ module.exports = function(grunt) {
         compass: {
             dev: {
                 options: {
-                    config: "<%= app.config.compass %>"
+                    config: app.config.compass
                 }
             }
         },
@@ -366,33 +362,31 @@ module.exports = function(grunt) {
             },
 
             dev: {
-                files: {
-                    "<%= app.folder.css %>/<%= app.file.css %>": "<%= app.folder.stylus %>/**/*.styl"
-                }
+                src: app.folder.stylus +"/**/*.styl",
+                dest: app.folder.css +"/"+ app.file.css
             }
         },
 
         autoprefixer: {
             dist: {
-                src: "<%= app.folder.dist %>/<%= app.folder.css %>/**/*.css"
+                src: app.folder.dist +"/"+ app.folder.css +"/**/*.css"
             }
         },
 
         csslint: {
             options: {
-                csslintrc: "<%= app.config.csslint %>"
+                csslintrc: app.config.csslint
             },
 
             dist: {
-                src: "<%= app.folder.dist %>/<%= app.folder.css %>/<%= app.file.css %>"
+                src: app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css
             }
         },
 
         cssmin: {
             dist: {
-                files: {
-                    "<%= app.folder.dist %>/<%= app.folder.css %>/<%= app.file.css %>": "<%= app.folder.dist %>/<%= app.folder.css %>/<%= app.file.css %>"
-                }
+                src: app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css,
+                dest: app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css
             }
         },
 
@@ -406,20 +400,16 @@ module.exports = function(grunt) {
 
         jshint: {
             options: {
-                jshintrc: "<%= app.config.jshint %>",
+                jshintrc: app.config.jshint,
                 reporter: require("jshint-stylish")
             },
 
             grunt: {
-                files: {
-                    src: "<%= app.file.grunt %>"
-                }
+                src: app.file.grunt
             },
 
             js: {
-                files: {
-                    src: "<%= app.folder.dist %>/<%= app.folder.js %>/<%= app.file.js %>"
-                }
+                src: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
             }
         },
 
@@ -429,9 +419,8 @@ module.exports = function(grunt) {
             },
 
             dist: {
-                files: {
-                    "<%= app.folder.dist %>/<%= app.folder.js %>/<%= app.file.js %>": ["<%= app.folder.dist %>/<%= app.folder.js %>/<%= app.file.js %>"]
-                }
+                src: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js,
+                dest: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
             }
         }
     });
