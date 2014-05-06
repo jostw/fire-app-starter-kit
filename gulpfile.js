@@ -10,6 +10,9 @@
 "use strict";
 
 var gulp =    require("gulp"),
+
+    fs =      require("fs"),
+    wiredep = require("wiredep").stream,
     yargs =   require("yargs"),
 
     plugins = require("gulp-load-plugins")(),
@@ -23,6 +26,15 @@ var gulp =    require("gulp"),
     preprocessor = yargs.argv.pre || app.preprocessor,
 
     isWatch = false;
+
+
+app.folder.vendor = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
+
+app.regex = {
+    html5shiv: new RegExp(app.regex.html5shiv),
+    respond: new RegExp(app.regex.respond)
+};
+
 
 // ##      ##    ###    ########  ######  ##     ##
 // ##  ##  ##   ## ##      ##    ##    ## ##     ##
@@ -168,6 +180,21 @@ gulp.task("clean:partial", ["concat:main"], function() {
 // ##     ##    ##    ##     ## ##
 // ##     ##    ##    ##     ## ##
 // ##     ##    ##    ##     ## ########
+
+gulp.task("bowerInstall:dev", function() {
+    return gulp.src([
+                   app.template.style,
+                   app.template.script
+               ])
+               .pipe(wiredep({
+                   directory: app.folder.vendor,
+                   exclude: [
+                       app.regex.html5shiv,
+                       app.regex.respond
+                   ]
+               }))
+               .pipe(gulp.dest("."));
+});
 
 gulp.task("slim:dev", function() {
     return gulp.src([
@@ -339,8 +366,8 @@ gulp.task("default", ["jshint:gulp", "html-watch"], function() {
 });
 
 
-gulp.task("clear", function() {
-    return gulp.start("clean:all");
+gulp.task("clear", ["clean:all"], function() {
+    return gulp.start("bowerInstall:dev");
 });
 
 
