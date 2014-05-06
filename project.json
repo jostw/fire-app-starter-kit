@@ -4,6 +4,7 @@
     "author": "jos",
     "app": {
         "config": {
+            "bower": ".bowerrc",
             "grunt": "package.json",
 
             "compass": "config.rb",
@@ -33,7 +34,6 @@
             "template": "template",
             "partial": "partial",
 
-            "vendor": "vendor",
             "temp": ".tmp",
 
             "dist": "dist"
@@ -81,6 +81,13 @@
             },
 
             "validation": "validation-status.json"
+        },
+
+        "regex": {
+            "html5shiv": "html5shiv",
+            "respond": "respond",
+
+            "main": "main"
         }
     }
 }

@@ -10,14 +10,19 @@
 "use strict";
 
 module.exports = function(grunt) {
-    var app = require("./project.json").app;
+    var fs =  require("fs"),
+        app = require("./project.json").app;
+
+
+    app.folder.vendor = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
 
     app.regex = {
-        "html5shiv": /html5shiv/,
-        "respond": /respond/,
+        html5shiv: new RegExp(app.regex.html5shiv),
+        respond: new RegExp(app.regex.respond),
 
-        "main": /main/
+        main: new RegExp(app.regex.main)
     };
+
 
     grunt.initConfig({
         pkg: grunt.file.readJSON(app.config.grunt),
