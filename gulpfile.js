@@ -9,12 +9,20 @@
 
 "use strict";
 
-var gulp = require("gulp"),
-    yargs = require("yargs"),
+var gulp =    require("gulp"),
+    yargs =   require("yargs"),
 
     plugins = require("gulp-load-plugins")(),
 
-    app = require("./project.json").app;
+    app =     require("./project.json").app,
+
+    /**
+     * Usage: gulp [task] [--pre=stylus]
+     *     - Use compass as default preprocessor
+     */
+    preprocessor = yargs.argv.pre || app.preprocessor,
+
+    isWatch = false;
 
 // ##      ##    ###    ########  ######  ##     ##
 // ##  ##  ##   ## ##      ##    ##    ## ##     ##
@@ -57,17 +65,25 @@ gulp.task("rename:partial", ["slim:dev"], function() {
 //  ######   #######  ##    ##  ######  ##     ##    ##
 
 gulp.task("concat:main", ["rename:partial"], function() {
-    var count = 0;
+    var count = 0,
+        src = [
+            app.folder.partial +"/"+ app.file.head,
+            app.folder.partial +"/"+ app.file.style,
 
-    return gulp.src([
-                   app.folder.partial +"/"+ app.file.head,
-                   app.folder.partial +"/"+ app.file.style,
+            app.folder.partial +"/"+ app.file.main,
 
-                   app.folder.partial +"/"+ app.file.main,
+            app.folder.partial +"/"+ app.file.foot,
+            app.folder.partial +"/"+ app.file.script
+        ];
 
-                   app.folder.partial +"/"+ app.file.foot,
-                   app.folder.partial +"/"+ app.file.script
-               ])
+    /**
+     *     * Add livereload.js to html when using html-watch task
+     */
+    if(isWatch) {
+        src.push(app.folder.partial +"/"+ app.file.livereload);
+    }
+
+    return gulp.src(src)
                .pipe(plugins.concatUtil(app.file.index, {
                    process: function(src) {
                        if(count === 2) {
@@ -92,9 +108,23 @@ gulp.task("concat:main", ["rename:partial"], function() {
 // ##    ## ##     ## ##           ##
 //  ######   #######  ##           ##
 
-gulp.task("copy:js", function() {
-    gulp.src(app.folder.js +"/**/*.js")
-        .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.js));
+gulp.task("copy:vendor", function() {
+    gulp.src([
+            app.folder.vendor +"/**/*.css",
+            app.folder.vendor +"/**/*.js"
+        ])
+        .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.vendor));
+
+    return gulp.src([
+                   app.folder.vendor +"/"+ app.vendor.html5shiv.path +"/"+ app.vendor.html5shiv.file,
+                   app.folder.vendor +"/"+ app.vendor.respond.path +"/"+ app.vendor.respond.file
+               ])
+               .pipe(gulp.dest(app.folder.js +"/"+ app.folder.vendor));
+});
+
+gulp.task("copy:js", ["copy:vendor"], function() {
+    return gulp.src(app.folder.js +"/**/*.js")
+               .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.js));
 });
 
 //  ######  ##       ########    ###    ##    ##
@@ -106,19 +136,19 @@ gulp.task("copy:js", function() {
 //  ######  ######## ######## ##     ## ##    ##
 
 gulp.task("clean:all", function() {
-    gulp.src([
-            app.folder.css,
-            app.folder.js +"/"+ app.folder.vendor,
-            app.folder.partial,
-            app.folder.temp,
-            app.folder.dist
-        ], app.config.clean)
-        .pipe(plugins.clean());
+    return gulp.src([
+                   app.folder.css,
+                   app.folder.js +"/"+ app.folder.vendor,
+                   app.folder.partial,
+                   app.folder.temp,
+                   app.folder.dist
+               ], app.config.clean)
+               .pipe(plugins.clean());
 });
 
-gulp.task("clean:css", ["compass:dev"], function() {
-    gulp.src(app.folder.css, app.config.clean)
-        .pipe(plugins.clean());
+gulp.task("clean:css", [preprocessor +":dev"], function() {
+    return gulp.src(app.folder.css, app.config.clean)
+               .pipe(plugins.clean());
 });
 
 gulp.task("clean:js", ["copy:js"], function() {
@@ -155,12 +185,12 @@ gulp.task("slim:dev", function() {
 });
 
 gulp.task("htmlmin:dev", ["concat:main"], function() {
-    gulp.src(app.folder.dist +"/"+ app.file.index)
-        .pipe(plugins.htmlmin())
-        .pipe(gulp.dest(app.folder.dist));
+    return gulp.src(app.folder.dist +"/"+ app.file.index)
+               .pipe(plugins.htmlmin())
+               .pipe(gulp.dest(app.folder.dist));
 });
 
-gulp.task("htmlhint:dist", function() {
+gulp.task("htmlhint:dist", ["htmlmin:dev"], function() {
     gulp.src(app.folder.dist +"/"+ app.file.index)
         .pipe(plugins.htmlhint({ htmlhintrc: app.config.htmlhint }))
         .pipe(plugins.htmlhint.reporter());
@@ -184,7 +214,7 @@ gulp.task("compass:dev", function() {
                .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
 });
 
-gulp.task("csslint:dist", function() {
+gulp.task("csslint:dist", preprocessor === "compass" ? [preprocessor +":dev"] : ["stylus", "autoprefixer"], function() {
     gulp.src(app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css)
         .pipe(plugins.csslint(app.config.csslint))
         .pipe(plugins.csslint.reporter());
@@ -204,10 +234,10 @@ gulp.task("jshint:gulp", function() {
                .pipe(plugins.jshint.reporter("jshint-stylish"));
 });
 
-gulp.task("jshint:js", function() {
-    return gulp.src(app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js)
-               .pipe(plugins.jshint(app.config.jshint))
-               .pipe(plugins.jshint.reporter("jshint-stylish"));
+gulp.task("jshint:js", ["copy:js"], function() {
+    gulp.src(app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js)
+        .pipe(plugins.jshint(app.config.jshint))
+        .pipe(plugins.jshint.reporter("jshint-stylish"));
 });
 
 //  ######  ##     ## ########  ########    ###     ######  ##    ##  ######
@@ -218,26 +248,83 @@ gulp.task("jshint:js", function() {
 // ##    ## ##     ## ##     ##    ##    ##     ## ##    ## ##   ##  ##    ##
 //  ######   #######  ########     ##    ##     ##  ######  ##    ##  ######
 
-var preprocessor = yargs.argv.pre || app.preprocessor;
+/**
+ * Create html file:
+ *     - Create partial html files from slim templates
+ *     - Rename partial html files
+ *     - Concat partial html files into a single html file
+ *     - Remove redudant code in the html file
+ *     - Remove partial html files
+ *
+ *     * Add livereload.js to html when using html-watch task
+ */
+gulp.task("html-init", function() {
+    gulp.start(
+        "slim:dev",
+        "rename:partial",
+        "concat:main",
+        "htmlmin:dev", "clean:partial"
+    );
+});
 
-gulp.task("html-init", [
-    "slim:dev",
-    "rename:partial",
-    "concat:main",
-    "htmlmin:dev", "clean:partial"
-]);
+gulp.task("html-watch", function() {
+    isWatch = true;
 
-gulp.task("html-lint", ["htmlhint:dist"]);
+    gulp.start("html-init");
+});
 
+/**
+ * Lint html file:
+ *     - Validate the html file
+ */
+gulp.task("html-lint", function() {
+    gulp.start("htmlhint:dist");
+});
 
-gulp.task("css-init", [preprocessor +":dev", "clean:css"]);
+/**
+ * Create css file:
+ *     - Create a css file from scss/stylus files
+ *     - Remove the original css file
+ */
+gulp.task("css-init", function() {
+    if(preprocessor === "compass") {
+        gulp.start(
+            "compass:dev",
+            "clean:css"
+        );
+    }
+    else {
+        // stylus + autoprefixer
+    }
+});
 
-gulp.task("css-lint", ["csslint:dist"]);
+/**
+ * Lint css file:
+ *     - Lint css file in distribution folder
+ */
+gulp.task("css-lint", function() {
+    gulp.start("csslint:dist");
+});
 
+/**
+ * Create js file:
+ *     - Copy js file to distribution folder
+ *     - Remove vendor folder in js folder
+ */
+gulp.task("js-init", function() {
+    gulp.start(
+        "copy:js",
+        "clean:js"
+    );
+});
 
-gulp.task("js-init", ["copy:js", "clean:js"]);
-
-gulp.task("js-lint", ["jshint:js"]);
+/**
+ * Lint js file:
+ *     - Lint js file in distribution folder
+ */
+gulp.task("js-lint", function() {
+    gulp.start("jshint:js");
+});
 
 // ########    ###     ######  ##    ##  ######
 //    ##      ## ##   ##    ## ##   ##  ##    ##
@@ -247,8 +334,41 @@ gulp.task("js-lint", ["jshint:js"]);
 //    ##    ##     ## ##    ## ##   ##  ##    ##
 //    ##    ##     ##  ######  ##    ##  ######
 
-gulp.task("default", ["jshint:gulp"], function() {
+gulp.task("default", ["jshint:gulp", "html-watch"], function() {
     gulp.start("watch");
 });
 
-gulp.task("clear", ["clean:all"]);
+
+gulp.task("clear", function() {
+    return gulp.start("clean:all");
+});
+
+
+gulp.task("reset", ["jshint:gulp", "clear"], function() {
+    gulp.start(
+        "copy:vendor",
+
+        // css-init
+        preprocessor +":dev",
+        "clean:css",
+
+        // css-lint
+        "csslint:dist",
+
+        // js-init
+        "copy:js",
+        "clean:js",
+
+        // js-lint
+        "jshint:js",
+
+        // html-init
+        "slim:dev",
+        "rename:partial",
+        "concat:main",
+        "htmlmin:dev", "clean:partial",
+
+        // html-lint
+        "htmlhint:dist"
+    );
+});
