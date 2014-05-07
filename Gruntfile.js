@@ -230,11 +230,7 @@ module.exports = function(grunt) {
 // ##     ## ########    ###
 
         rev: {
-            options: {
-                encoding: "utf8",
-                algorithm: "md5",
-                length: 8
-            },
+            options: app.config.rev,
 
             dist: {
                 src: [

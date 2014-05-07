@@ -23,6 +23,12 @@
 
             "stylus": {
                 "compress": false
+            },
+
+            "rev": {
+                "encoding": "utf8",
+                "algorithm": "md5",
+                "length": 8
             }
         },
 
