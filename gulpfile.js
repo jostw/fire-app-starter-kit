@@ -45,11 +45,49 @@ app.regex = {
 //  ###  ###  ##     ##    ##     ######  ##     ##
 
 gulp.task("watch", function() {
-    var server = plugins.livereload();
+    var livereload = plugins.livereload();
 
-    gulp.watch([app.folder.dist +"/**"]).on("change", function(file) {
-        server.changed(file.path);
-    });
+    gulp.watch(app.folder.scss +"/**/*.scss", [
+        // css-init
+        "compass:dev",
+        "clean:css",
+
+        // css-lint
+        "csslint:dist"
+    ]);
+
+    gulp.watch(app.folder.stylus +"/**/*.styl", [
+        // css-init
+        "stylus:dev",
+        "autoprefixer:dist",
+
+        // css-lint
+        "csslint:dist"
+    ]);
+
+    gulp.watch(app.folder.js +"/**/*.js", [
+        // js-init
+        "copy:js",
+        "clean:js",
+
+        // js-lint
+        "jshint:js"
+    ]);
+
+    gulp.watch(["*.slim", app.folder.template +"/*.slim"], [
+        // html-init
+        "slim:dev",
+        "rename:partial",
+        "concat:main",
+        "htmlmin:dev", "clean:partial",
+
+        // html-lint
+        "htmlhint:dist"
+    ]);
+
+    // gulp.watch([app.folder.dist +"/**"]).on("change", function(file) {
+    //     livereload.changed(file.path);
+    // });
 });
 
 // ########  ######## ##    ##    ###    ##     ## ########
