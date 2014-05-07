@@ -459,7 +459,7 @@ module.exports = function(grunt) {
 
     /**
      * Lint html file:
-     *     - Validate the html file
+     *     - Lint the html file
      */
     grunt.registerTask("html-lint", ["htmlhint:dist"]);
 
