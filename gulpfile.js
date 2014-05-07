@@ -241,7 +241,19 @@ gulp.task("compass:dev", function() {
                .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
 });
 
-gulp.task("csslint:dist", preprocessor === "compass" ? [preprocessor +":dev"] : ["stylus", "autoprefixer"], function() {
+gulp.task("stylus:dev", function() {
+    return gulp.src(app.folder.stylus +"/**/*.styl")
+               .pipe(plugins.stylus(app.config.stylus))
+               .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
+});
+
+gulp.task("autoprefixer:dist", ["stylus:dev"], function() {
+    return gulp.src(app.folder.dist +"/"+ app.folder.css +"/**/*.css")
+               .pipe(plugins.autoprefixer())
+               .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
+});
+
+gulp.task("csslint:dist", preprocessor === "compass" ? [preprocessor +":dev"] : ["stylus:dev", "autoprefixer:dist"], function() {
     gulp.src(app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css)
         .pipe(plugins.csslint(app.config.csslint))
         .pipe(plugins.csslint.reporter());
@@ -311,7 +323,9 @@ gulp.task("html-lint", function() {
 /**
  * Create css file:
  *     - Create a css file from scss/stylus files
- *     - Remove the original css file
+ *
+ *     * Remove the original css file when using compass
+ *     * Add vendor prefix with autoprefixer when using stylus
  */
 gulp.task("css-init", function() {
     if(preprocessor === "compass") {
@@ -320,8 +334,11 @@ gulp.task("css-init", function() {
             "clean:css"
         );
     }
-    else {
-        // stylus + autoprefixer
+    else if(preprocessor === "stylus") {
+        gulp.start(
+            "stylus:dev",
+            "autoprefixer:dist"
+        );
     }
 });
 
@@ -377,7 +394,7 @@ gulp.task("reset", ["jshint:gulp", "clear"], function() {
 
         // css-init
         preprocessor +":dev",
-        "clean:css",
+        preprocessor === "compass" ? "clean:css" : "autoprefixer:dist",
 
         // css-lint
         "csslint:dist",

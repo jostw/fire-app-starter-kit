@@ -36,6 +36,8 @@
     "gulp-clean": "~0.2.4",
     "gulp-htmlhint": "0.0.7",
     "gulp-compass": "~1.1.8",
-    "gulp-csslint": "~0.1.4"
+    "gulp-csslint": "~0.1.4",
+    "gulp-stylus": "~1.0.0",
+    "gulp-autoprefixer": "0.0.7"
   }
 }
