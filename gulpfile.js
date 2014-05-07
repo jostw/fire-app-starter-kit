@@ -44,50 +44,66 @@ app.regex = {
 // ##  ##  ## ##     ##    ##    ##    ## ##     ##
 //  ###  ###  ##     ##    ##     ######  ##     ##
 
-gulp.task("watch", function() {
+gulp.task("watch", ["slim:dev", "rename:partial", "concat:main", "htmlmin:dev", "clean:partial"], function() {
     var livereload = plugins.livereload();
 
-    gulp.watch(app.folder.scss +"/**/*.scss", [
-        // css-init
-        "compass:dev",
-        "clean:css",
+    gulp.watch(app.folder.scss +"/**/*.scss", function() {
+        setTimeout(function() {
+            gulp.start(
+                // css-init
+                "compass:dev",
+                "clean:css",
 
-        // css-lint
-        "csslint:dist"
-    ]);
+                // css-lint
+                "csslint:dist"
+            );
+        }, 500);
+    });
 
-    gulp.watch(app.folder.stylus +"/**/*.styl", [
-        // css-init
-        "stylus:dev",
-        "autoprefixer:dist",
+    gulp.watch(app.folder.stylus +"/**/*.styl", function() {
+        setTimeout(function() {
+            gulp.start(
+                // css-init
+                "stylus:dev",
+                "autoprefixer:dist",
 
-        // css-lint
-        "csslint:dist"
-    ]);
+                // css-lint
+                "csslint:dist"
+            );
+        }, 500);
+    });
 
-    gulp.watch(app.folder.js +"/**/*.js", [
-        // js-init
-        "copy:js",
-        "clean:js",
+    gulp.watch(app.folder.js +"/**/*.js", function() {
+        setTimeout(function() {
+            gulp.start(
+                // js-init
+                "copy:js",
+                "clean:js",
 
-        // js-lint
-        "jshint:js"
-    ]);
+                // js-lint
+                "jshint:js"
+            );
+        }, 500);
+    });
 
-    gulp.watch(["*.slim", app.folder.template +"/*.slim"], [
-        // html-init
-        "slim:dev",
-        "rename:partial",
-        "concat:main",
-        "htmlmin:dev", "clean:partial",
+    gulp.watch(["*.slim", app.folder.template +"/*.slim"], function() {
+        setTimeout(function() {
+            gulp.start(
+                // html-init
+                "slim:dev",
+                "rename:partial",
+                "concat:main",
+                "htmlmin:dev", "clean:partial",
 
-        // html-lint
-        "htmlhint:dist"
-    ]);
+                // html-lint
+                "htmlhint:dist"
+            );
+        }, 500);
+    });
 
-    // gulp.watch([app.folder.dist +"/**"]).on("change", function(file) {
-    //     livereload.changed(file.path);
-    // });
+    gulp.watch([app.folder.dist +"/**"]).on("change", function(file) {
+        livereload.changed(file.path);
+    });
 });
 
 // ########  ######## ##    ##    ###    ##     ## ########
@@ -126,9 +142,6 @@ gulp.task("concat:main", ["rename:partial"], function() {
             app.folder.partial +"/"+ app.file.script
         ];
 
-    /**
-     *     * Add livereload.js to html when using html-watch task
-     */
     if(isWatch) {
         src.push(app.folder.partial +"/"+ app.file.livereload);
     }
@@ -332,8 +345,6 @@ gulp.task("jshint:js", ["copy:js"], function() {
  *     - Concat partial html files into a single html file
  *     - Remove redudant code in the html file
  *     - Remove partial html files
- *
- *     * Add livereload.js to html when using html-watch task
  */
 gulp.task("html-init", function() {
     gulp.start(
@@ -342,12 +353,6 @@ gulp.task("html-init", function() {
         "concat:main",
         "htmlmin:dev", "clean:partial"
     );
-});
-
-gulp.task("html-watch", function() {
-    isWatch = true;
-
-    gulp.start("html-init");
 });
 
 /**
@@ -416,16 +421,52 @@ gulp.task("js-lint", function() {
 //    ##    ##     ## ##    ## ##   ##  ##    ##
 //    ##    ##     ##  ######  ##    ##  ######
 
-gulp.task("default", ["jshint:gulp", "html-watch"], function() {
-    gulp.start("watch");
+/**
+ * Default task:
+ *     - Lint Gruntfile.js
+ *     - html-init task
+ *     - Watch files
+ *
+ *     * Add livereload.js to html
+ */
+gulp.task("default", ["jshint:gulp"], function() {
+    isWatch = true;
+
+    gulp.start(
+        // html-init
+        "slim:dev",
+        "rename:partial",
+        "concat:main",
+        "htmlmin:dev", "clean:partial",
+
+        "watch"
+    );
 });
 
-
+/**
+ * Clear task:
+ *     - Remove all generated files
+ *     - Insert bower files into slim templates
+ */
 gulp.task("clear", ["clean:all"], function() {
     return gulp.start("bowerInstall:dev");
 });
 
-
+/**
+ * Reset task:
+ *     - Lint Gruntfile.js
+ *     - Clear task
+ *
+ *     - Copy vendor files to distribution folder
+ *
+ *     - Create css file
+ *     - Create js file
+ *     - Creat html file
+ *
+ *     - Lint css file
+ *     - Lint js file
+ *     - Lint html file
+ */
 gulp.task("reset", ["jshint:gulp", "clear"], function() {
     gulp.start(
         "copy:vendor",
