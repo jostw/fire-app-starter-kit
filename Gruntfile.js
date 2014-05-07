@@ -362,9 +362,7 @@ module.exports = function(grunt) {
         },
 
         stylus: {
-            options: {
-                compress: false
-            },
+            options: app.config.stylus,
 
             dev: {
                 src: app.folder.stylus +"/**/*.styl",
