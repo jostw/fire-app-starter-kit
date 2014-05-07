@@ -192,23 +192,23 @@ gulp.task("clean:all", function() {
                    app.folder.partial,
                    app.folder.temp,
                    app.folder.dist
-               ], app.config.clean)
-               .pipe(plugins.clean());
+               ])
+               .pipe(plugins.clean(app.config.clean));
 });
 
 gulp.task("clean:css", [preprocessor +":dev"], function() {
-    return gulp.src(app.folder.css, app.config.clean)
-               .pipe(plugins.clean());
+    return gulp.src(app.folder.css)
+               .pipe(plugins.clean(app.config.clean));
 });
 
 gulp.task("clean:js", ["copy:js"], function() {
-    gulp.src(app.folder.js +"/"+ app.folder.vendor, app.config.clean)
-        .pipe(plugins.clean());
+    gulp.src(app.folder.js +"/"+ app.folder.vendor)
+        .pipe(plugins.clean(app.config.clean));
 });
 
 gulp.task("clean:partial", ["concat:main"], function() {
-    gulp.src(app.folder.partial, app.config.clean)
-        .pipe(plugins.clean());
+    gulp.src(app.folder.partial)
+        .pipe(plugins.clean(app.config.clean));
 });
 
 // ##     ## ######## ##     ## ##
