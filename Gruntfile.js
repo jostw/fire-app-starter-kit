@@ -321,10 +321,7 @@ module.exports = function(grunt) {
             },
 
             dist: {
-                options: {
-                    removeComments: true,
-                    collapseWhitespace: true
-                },
+                options: app.config.htmlmin,
 
                 src: app.folder.dist +"/"+ app.file.index,
                 dest: app.folder.dist +"/"+ app.file.index

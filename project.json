@@ -33,6 +33,11 @@
 
             "uglify": {
                 "preserveComments": "some"
+            },
+
+            "htmlmin": {
+                "removeComments": true,
+                "collapseWhitespace": true
             }
         },
 
