@@ -32,7 +32,9 @@ app.folder.vendor = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).direct
 
 app.regex = {
     html5shiv: new RegExp(app.regex.html5shiv),
-    respond: new RegExp(app.regex.respond)
+    respond: new RegExp(app.regex.respond),
+
+    index: new RegExp(app.regex.index)
 };
 
 
@@ -209,7 +211,7 @@ gulp.task("clean:all", function() {
                .pipe(plugins.clean(app.config.clean));
 });
 
-gulp.task("clean:css", [preprocessor +":dev"], function() {
+gulp.task("clean:css", ["compass:dev"], function() {
     return gulp.src(app.folder.css)
                .pipe(plugins.clean(app.config.clean));
 });
@@ -222,6 +224,19 @@ gulp.task("clean:js", ["copy:js"], function() {
 gulp.task("clean:partial", ["concat:main"], function() {
     gulp.src(app.folder.partial)
         .pipe(plugins.clean(app.config.clean));
+});
+
+gulp.task("clean:vendor", function() {
+    gulp.src(app.folder.dist +"/"+ app.folder.vendor)
+        .pipe(plugins.clean(app.config.clean));
+});
+
+gulp.task("clean:usemin", function() {
+    gulp.src([
+        app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css,
+        app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js,
+    ])
+    .pipe(plugins.clean(app.config.clean));
 });
 
 // ##     ## ######## ##     ## ##
@@ -304,7 +319,7 @@ gulp.task("autoprefixer:dist", ["stylus:dev"], function() {
                .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
 });
 
-gulp.task("csslint:dist", preprocessor === "compass" ? [preprocessor +":dev"] : ["stylus:dev", "autoprefixer:dist"], function() {
+gulp.task("csslint:dist", preprocessor === "compass" ? ["compass:dev"] : ["stylus:dev", "autoprefixer:dist"], function() {
     gulp.src(app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css)
         .pipe(plugins.csslint(app.config.csslint))
         .pipe(plugins.csslint.reporter());
@@ -377,7 +392,7 @@ gulp.task("css-init", function() {
             "clean:css"
         );
     }
-    else if(preprocessor === "stylus") {
+    else {
         gulp.start(
             "stylus:dev",
             "autoprefixer:dist"
@@ -411,6 +426,48 @@ gulp.task("js-init", function() {
  */
 gulp.task("js-lint", function() {
     gulp.start("jshint:js");
+});
+
+/**
+ * Usemin replace:
+ *     - Concat assests files into a single file
+ *     - Replace assests files to single file
+ *     - Revision files name
+ *     - Remove redudant code in the html file
+ *     - Lint html file
+ */
+gulp.task("usemin-replace", ["concat:main"], function() {
+    return gulp.src(app.folder.dist +"/"+ app.file.index)
+               .pipe(plugins.useref.assets())
+               .pipe(plugins.useref.restore())
+               .pipe(plugins.useref())
+               .pipe(gulp.dest(app.folder.dist))
+
+               .pipe(plugins.revAll({
+                   ignore: [
+                       app.regex.html5shiv,
+                       app.regex.respond,
+                       app.regex.index
+                   ]
+               }))
+               .pipe(gulp.dest(app.folder.dist))
+
+               .pipe(plugins.filter(app.file.index))
+
+               .pipe(plugins.htmlmin())
+               .pipe(gulp.dest(app.folder.dist))
+
+               .pipe(plugins.htmlhint({ htmlhintrc: app.config.htmlhint }))
+               .pipe(plugins.htmlhint.reporter());
+});
+
+/**
+ * Usemin remove:
+ *     - Remove vendor folder in distribution folder
+ *     - Remove unrevision files in distribution folder
+ */
+gulp.task("usemin-remove", ["usemin-replace"], function() {
+    gulp.start("clean:vendor", "clean:usemin");
 });
 
 // ########    ###     ######  ##    ##  ######
@@ -460,11 +517,12 @@ gulp.task("clear", ["clean:all"], function() {
  *     - Copy vendor files to distribution folder
  *
  *     - Create css file
- *     - Create js file
- *     - Creat html file
- *
  *     - Lint css file
+ *
+ *     - Create js file
  *     - Lint js file
+ *
+ *     - Creat html file
  *     - Lint html file
  */
 gulp.task("reset", ["jshint:gulp", "clear"], function() {
@@ -493,5 +551,53 @@ gulp.task("reset", ["jshint:gulp", "clear"], function() {
 
         // html-lint
         "htmlhint:dist"
+    );
+});
+
+/**
+ * Build task:
+ *     - Lint Gruntfile.js
+ *     - Clear task
+ *
+ *     - Copy vendor files to distribution folder
+ *
+ *     - Create css file
+ *     - Lint css file
+ *
+ *     - Create js file
+ *     - Lint js file
+ *
+ *     - Creat html file
+ *
+ *     - Usemin replace
+ *     - Usemin remove
+ */
+gulp.task("build", ["jshint:gulp", "clear"], function() {
+    gulp.start(
+        "copy:vendor",
+
+        // css-init
+        preprocessor +":dev",
+        preprocessor === "compass" ? "clean:css" : "autoprefixer:dist",
+
+        // css-lint
+        "csslint:dist",
+
+        // js-init
+        "copy:js",
+        "clean:js",
+
+        // js-lint
+        "jshint:js",
+
+        // html-init
+        "slim:dev",
+        "rename:partial",
+        "concat:main",
+        "clean:partial",
+
+        // usemin
+        "usemin-replace",
+        "usemin-remove"
     );
 });

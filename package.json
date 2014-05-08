@@ -38,6 +38,9 @@
     "gulp-compass": "~1.1.8",
     "gulp-csslint": "~0.1.4",
     "gulp-stylus": "~1.0.0",
-    "gulp-autoprefixer": "0.0.7"
+    "gulp-autoprefixer": "0.0.7",
+    "gulp-useref": "~0.4.3",
+    "gulp-rev-all": "~0.2.0",
+    "gulp-filter": "~0.4.1"
   }
 }

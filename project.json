@@ -97,6 +97,7 @@
             "html5shiv": "html5shiv",
             "respond": "respond",
 
+            "index": "index",
             "main": "main"
         }
     }
