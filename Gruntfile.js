@@ -413,9 +413,7 @@ module.exports = function(grunt) {
         },
 
         uglify: {
-            options: {
-                preserveComments: "some"
-            },
+            options: app.config.uglify,
 
             dist: {
                 src: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js,
