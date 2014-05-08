@@ -319,7 +319,7 @@ gulp.task("autoprefixer:dist", ["stylus:dev"], function() {
                .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
 });
 
-gulp.task("csslint:dist", preprocessor === "compass" ? ["compass:dev"] : ["stylus:dev", "autoprefixer:dist"], function() {
+gulp.task("csslint:dist", preprocessor === "compass" ? ["compass:dev"] : ["autoprefixer:dist"], function() {
     gulp.src(app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css)
         .pipe(plugins.csslint(app.config.csslint))
         .pipe(plugins.csslint.reporter());
@@ -445,7 +445,7 @@ gulp.task("js-lint", function() {
  *     - Concat assests files into a single file
  *     - Replace assests files to single file
  */
-gulp.task("usemin-prepare", ["concat:main"], function() {
+gulp.task("usemin-prepare", preprocessor === "compass" ? ["compass:dev", "concat:main"] : ["autoprefixer:dist", "concat:main"], function() {
     return gulp.src(app.folder.dist +"/"+ app.file.index)
                .pipe(plugins.useref.assets())
                .pipe(plugins.useref.restore())
