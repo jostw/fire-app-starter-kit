@@ -40,7 +40,7 @@
     "gulp-stylus": "~1.0.0",
     "gulp-autoprefixer": "0.0.7",
     "gulp-useref": "~0.4.3",
-    "gulp-rev-all": "~0.2.0",
+    "gulp-rev-all": "jostw/gulp-rev-all",
     "gulp-filter": "~0.4.1"
   }
 }
