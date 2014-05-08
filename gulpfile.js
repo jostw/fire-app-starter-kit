@@ -226,15 +226,15 @@ gulp.task("clean:partial", ["concat:main"], function() {
         .pipe(plugins.clean(app.config.clean));
 });
 
-gulp.task("clean:vendor", function() {
-    gulp.src(app.folder.dist +"/"+ app.folder.bower)
-        .pipe(plugins.clean(app.config.clean));
+gulp.task("clean:vendor", ["usemin-prepare"], function() {
+    return gulp.src(app.folder.dist +"/"+ app.folder.bower)
+               .pipe(plugins.clean(app.config.clean));
 });
 
 gulp.task("clean:usemin", function() {
     gulp.src([
         app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css,
-        app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js,
+        app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
     ])
     .pipe(plugins.clean(app.config.clean));
 });
@@ -325,6 +325,12 @@ gulp.task("csslint:dist", preprocessor === "compass" ? ["compass:dev"] : ["stylu
         .pipe(plugins.csslint.reporter());
 });
 
+gulp.task("cssmin:dist", ["usemin-prepare"], function() {
+    return gulp.src(app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css)
+               .pipe(plugins.minifyCss())
+               .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.css));
+});
+
 //       ##  ######
 //       ## ##    ##
 //       ## ##
@@ -343,6 +349,12 @@ gulp.task("jshint:js", ["copy:js"], function() {
     gulp.src(app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js)
         .pipe(plugins.jshint(app.config.jshint))
         .pipe(plugins.jshint.reporter("jshint-stylish"));
+});
+
+gulp.task("uglify:dist", ["usemin-prepare"], function() {
+    return gulp.src(app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js)
+               .pipe(plugins.uglify(app.config.uglify))
+               .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.js));
 });
 
 //  ######  ##     ## ########  ########    ###     ######  ##    ##  ######
@@ -429,20 +441,26 @@ gulp.task("js-lint", function() {
 });
 
 /**
- * Usemin replace:
+ * Usemin prepare:
  *     - Concat assests files into a single file
  *     - Replace assests files to single file
- *     - Revision files name
- *     - Remove redudant code in the html file
- *     - Lint html file
  */
-gulp.task("usemin-replace", ["concat:main"], function() {
+gulp.task("usemin-prepare", ["concat:main"], function() {
     return gulp.src(app.folder.dist +"/"+ app.file.index)
                .pipe(plugins.useref.assets())
                .pipe(plugins.useref.restore())
                .pipe(plugins.useref())
-               .pipe(gulp.dest(app.folder.dist))
+               .pipe(gulp.dest(app.folder.dist));
+});
 
+/**
+ * Usemin replace:
+ *     - Revision files name
+ *     - Remove redudant code in the html file
+ *     - Lint html file
+ */
+gulp.task("usemin-replace", ["clean:vendor"], function() {
+    return gulp.src(app.folder.dist +"/**")
                .pipe(plugins.revAll({
                    ignore: [
                        app.regex.html5shiv,
@@ -461,13 +479,36 @@ gulp.task("usemin-replace", ["concat:main"], function() {
                .pipe(plugins.htmlhint.reporter());
 });
 
+gulp.task("usemin-replace-min", ["clean:vendor", "cssmin:dist", "uglify:dist"], function() {
+    return gulp.src(app.folder.dist +"/**")
+               .pipe(plugins.revAll({
+                   ignore: [
+                       app.regex.html5shiv,
+                       app.regex.respond,
+                       app.regex.index
+                   ]
+               }))
+               .pipe(gulp.dest(app.folder.dist))
+
+               .pipe(plugins.filter(app.file.index))
+
+               .pipe(plugins.htmlmin(app.config.htmlmin))
+               .pipe(gulp.dest(app.folder.dist))
+
+               .pipe(plugins.htmlhint({ htmlhintrc: app.config.htmlhint }))
+               .pipe(plugins.htmlhint.reporter());
+});
+
 /**
  * Usemin remove:
- *     - Remove vendor folder in distribution folder
  *     - Remove unrevision files in distribution folder
  */
 gulp.task("usemin-remove", ["usemin-replace"], function() {
-    gulp.start("clean:vendor", "clean:usemin");
+    gulp.start("clean:usemin");
+});
+
+gulp.task("usemin-remove-min", ["usemin-replace-min"], function() {
+    gulp.start("clean:usemin");
 });
 
 // ########    ###     ######  ##    ##  ######
@@ -569,6 +610,9 @@ gulp.task("reset", ["jshint:gulp", "clear"], function() {
  *
  *     - Creat html file
  *
+ *     - Usemin prepare
+ *     - Remove vendor folder in distribution folder
+ *
  *     - Usemin replace
  *     - Usemin remove
  */
@@ -597,7 +641,70 @@ gulp.task("build", ["jshint:gulp", "clear"], function() {
         "clean:partial",
 
         // usemin
+        "usemin-prepare",
+        "clean:vendor",
+
         "usemin-replace",
         "usemin-remove"
+    );
+});
+
+/**
+ * Min task:
+ *     - Lint Gruntfile.js
+ *     - Clear task
+ *
+ *     - Copy vendor files to distribution folder
+ *
+ *     - Create css file
+ *     - Lint css file
+ *
+ *     - Create js file
+ *     - Lint js file
+ *
+ *     - Creat html file
+ *
+ *     - Usemin prepare
+ *     - Remove vendor folder in distribution folder
+ *
+ *     - Compress css file
+ *     - Compress js file
+ *
+ *     - Usemin replace
+ *     - Usemin remove
+ */
+gulp.task("min", ["jshint:gulp", "clear"], function() {
+    gulp.start(
+        "copy:vendor",
+
+        // css-init
+        preprocessor +":dev",
+        preprocessor === "compass" ? "clean:css" : "autoprefixer:dist",
+
+        // css-lint
+        "csslint:dist",
+
+        // js-init
+        "copy:js",
+        "clean:js",
+
+        // js-lint
+        "jshint:js",
+
+        // html-init
+        "slim:dev",
+        "rename:partial",
+        "concat:main",
+        "clean:partial",
+
+        // usemin
+        "usemin-prepare",
+        "clean:vendor",
+
+        "cssmin:dist",
+        "uglify:dist",
+
+        "usemin-replace-min",
+        "usemin-remove-min"
     );
 });
