@@ -44,6 +44,7 @@
             "template": "template",
             "partial": "partial",
 
+            "vendor": "vendor",
             "temp": ".tmp",
 
             "dist": "dist"

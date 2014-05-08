@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         app = require("./project.json").app;
 
 
-    app.folder.vendor = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
+    app.folder.bower = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
 
     app.regex = {
         html5shiv: new RegExp(app.regex.html5shiv),
@@ -141,16 +141,16 @@ module.exports = function(grunt) {
             vendor: {
                 files: [
                     {
-                        src: app.folder.vendor +"/**/*.css",
+                        src: app.folder.bower +"/**/*.css",
                         dest: app.folder.dist +"/"
                     }, {
-                        src: app.folder.vendor +"/**/*.js",
+                        src: app.folder.bower +"/**/*.js",
                         dest: app.folder.dist +"/"
                     }, {
-                        src: app.folder.vendor +"/"+ app.vendor.html5shiv.path +"/"+ app.vendor.html5shiv.file,
+                        src: app.folder.bower +"/"+ app.vendor.html5shiv.path +"/"+ app.vendor.html5shiv.file,
                         dest: app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.html5shiv.file
                     }, {
-                        src: app.folder.vendor +"/"+ app.vendor.respond.path +"/"+ app.vendor.respond.file,
+                        src: app.folder.bower +"/"+ app.vendor.respond.path +"/"+ app.vendor.respond.file,
                         dest: app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.respond.file
                     }
                 ]
@@ -217,7 +217,7 @@ module.exports = function(grunt) {
             },
 
             vendor: {
-                src: app.folder.dist +"/"+ app.folder.vendor
+                src: app.folder.dist +"/"+ app.folder.bower
             }
         },
 

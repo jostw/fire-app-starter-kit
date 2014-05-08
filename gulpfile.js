@@ -28,7 +28,7 @@ var gulp =    require("gulp"),
     isWatch = false;
 
 
-app.folder.vendor = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
+app.folder.bower = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
 
 app.regex = {
     html5shiv: new RegExp(app.regex.html5shiv),
@@ -175,14 +175,14 @@ gulp.task("concat:main", ["rename:partial"], function() {
 
 gulp.task("copy:vendor", function() {
     gulp.src([
-            app.folder.vendor +"/**/*.css",
-            app.folder.vendor +"/**/*.js"
+            app.folder.bower +"/**/*.css",
+            app.folder.bower +"/**/*.js"
         ])
-        .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.vendor));
+        .pipe(gulp.dest(app.folder.dist +"/"+ app.folder.bower));
 
     return gulp.src([
-                   app.folder.vendor +"/"+ app.vendor.html5shiv.path +"/"+ app.vendor.html5shiv.file,
-                   app.folder.vendor +"/"+ app.vendor.respond.path +"/"+ app.vendor.respond.file
+                   app.folder.bower +"/"+ app.vendor.html5shiv.path +"/"+ app.vendor.html5shiv.file,
+                   app.folder.bower +"/"+ app.vendor.respond.path +"/"+ app.vendor.respond.file
                ])
                .pipe(gulp.dest(app.folder.js +"/"+ app.folder.vendor));
 });
@@ -227,7 +227,7 @@ gulp.task("clean:partial", ["concat:main"], function() {
 });
 
 gulp.task("clean:vendor", function() {
-    gulp.src(app.folder.dist +"/"+ app.folder.vendor)
+    gulp.src(app.folder.dist +"/"+ app.folder.bower)
         .pipe(plugins.clean(app.config.clean));
 });
 
@@ -253,7 +253,7 @@ gulp.task("bowerInstall:dev", function() {
                    app.template.script
                ])
                .pipe(wiredep({
-                   directory: app.folder.vendor,
+                   directory: app.folder.bower,
                    exclude: [
                        app.regex.html5shiv,
                        app.regex.respond
