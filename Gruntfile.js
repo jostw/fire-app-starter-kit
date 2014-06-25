@@ -219,9 +219,12 @@ module.exports = function(grunt) {
             js: {
                 src: [
                     app.folder.js +"/"+ app.folder.vendor,
-                    app.folder.js +"/"+ app.file.js,
-                    app.folder.js +"/"+ app.folder.app +"/"+ app.file.template
+                    app.folder.js +"/"+ app.file.js
                 ]
+            },
+
+            template: {
+                src: app.folder.js +"/"+ app.folder.app +"/"+ app.file.template
             },
 
             partial: {
@@ -558,23 +561,24 @@ module.exports = function(grunt) {
      * Clear task:
      *     - Remove all generated files
      *     - Insert bower files into slim templates
+     *     - Create js file from jsx
+     *     - Create script.js with browserify
+     *     - Remove template js file created from jsx
      */
-    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev"]);
+    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev", "react:dev", "browserify:dev", "clean:template"]);
 
     /**
      * Init task:
      *     - Lint Gruntfile.js
      *     - Clear task
      *     - Copy vendor files to distribution folder
-     *     - Create js file from jsx
-     *     - Create script.js with browserify
      *     - Create css file
      *     - Create js file
      *     - Creat html file
      *
      *     * Add vendor prefix with autoprefixer when using stylus
      */
-    grunt.registerTask("init", ["jshint:grunt", "clear", "copy:vendor", "react:dev", "browserify:dev", "css-init", "js-init", "html-init"]);
+    grunt.registerTask("init", ["jshint:grunt", "clear", "copy:vendor", "css-init", "js-init", "html-init"]);
 
     grunt.registerTask("init-compass", ["init"]);
     grunt.registerTask("init-stylus", ["init", "autoprefixer:dist"]);
