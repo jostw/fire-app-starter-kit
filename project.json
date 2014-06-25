@@ -44,6 +44,8 @@
         "preprocessor": "compass",
 
         "folder": {
+            "app": "app",
+
             "scss": "scss",
             "stylus": "stylus",
             "jsx": "jsx",
@@ -75,6 +77,7 @@
             "grunt": "Gruntfile.js",
             "gulp": "gulpfile.js",
 
+            "app": "app.js",
             "template": "template.js",
 
             "css": "style.css",

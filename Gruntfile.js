@@ -162,8 +162,18 @@ module.exports = function(grunt) {
             },
 
             js: {
-                src: app.folder.js +"/**/*.js",
-                dest: app.folder.dist +"/"
+                files: [
+                    {
+                        src: app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.html5shiv.file,
+                        dest: app.folder.dist +"/"+ app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.html5shiv.file
+                    }, {
+                        src: app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.respond.file,
+                        dest: app.folder.dist +"/"+ app.folder.js +"/"+ app.folder.vendor +"/"+ app.vendor.respond.file
+                    }, {
+                        src: app.folder.js +"/"+ app.file.js,
+                        dest: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
+                    }
+                ]
             },
 
             temp: {
@@ -194,6 +204,8 @@ module.exports = function(grunt) {
                 src: [
                     app.folder.css,
                     app.folder.js +"/"+ app.folder.vendor,
+                    app.folder.js +"/"+ app.file.js,
+                    app.folder.js +"/"+ app.folder.app +"/"+ app.file.template,
                     app.folder.partial,
                     app.folder.temp,
                     app.folder.dist
@@ -205,7 +217,11 @@ module.exports = function(grunt) {
             },
 
             js: {
-                src: app.folder.js +"/"+ app.folder.vendor
+                src: [
+                    app.folder.js +"/"+ app.folder.vendor,
+                    app.folder.js +"/"+ app.file.js,
+                    app.folder.js +"/"+ app.folder.app +"/"+ app.file.template
+                ]
             },
 
             partial: {
@@ -401,6 +417,16 @@ module.exports = function(grunt) {
             }
         },
 
+        browserify: {
+            dev: {
+                src: [
+                    app.folder.js +"/**/*.js"
+                ],
+
+                dest: "js/"+ app.file.js
+            }
+        },
+
         jshint: {
             options: {
                 jshintrc: app.config.jshint,
@@ -412,7 +438,9 @@ module.exports = function(grunt) {
             },
 
             js: {
-                src: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
+                src: [
+                    app.folder.js +"/"+ app.folder.app +"/"+ app.file.app
+                ]
             }
         },
 
@@ -531,20 +559,22 @@ module.exports = function(grunt) {
      *     - Remove all generated files
      *     - Insert bower files into slim templates
      */
-    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev", "react:dev"]);
+    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev"]);
 
     /**
      * Init task:
      *     - Lint Gruntfile.js
      *     - Clear task
      *     - Copy vendor files to distribution folder
+     *     - Create js file from jsx
+     *     - Create script.js with browserify
      *     - Create css file
      *     - Create js file
      *     - Creat html file
      *
      *     * Add vendor prefix with autoprefixer when using stylus
      */
-    grunt.registerTask("init", ["jshint:grunt", "clear", "copy:vendor", "css-init", "js-init", "html-init"]);
+    grunt.registerTask("init", ["jshint:grunt", "clear", "copy:vendor", "react:dev", "browserify:dev", "css-init", "js-init", "html-init"]);
 
     grunt.registerTask("init-compass", ["init"]);
     grunt.registerTask("init-stylus", ["init", "autoprefixer:dist"]);
