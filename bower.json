@@ -5,6 +5,7 @@
   "dependencies": {
     "html5shiv": null,
     "respond": null,
-    "normalize.css": "~3.0.1"
+    "normalize.css": "~3.0.1",
+    "react": "~0.10.0"
   }
 }

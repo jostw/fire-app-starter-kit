@@ -43,6 +43,7 @@
     "gulp-rev-all": "jostw/gulp-rev-all",
     "gulp-filter": "~0.4.1",
     "gulp-minify-css": "~0.3.4",
-    "gulp-uglify": "~0.2.1"
+    "gulp-uglify": "~0.2.1",
+    "grunt-react": "~0.8.2"
   }
 }

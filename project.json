@@ -46,6 +46,7 @@
         "folder": {
             "scss": "scss",
             "stylus": "stylus",
+            "jsx": "jsx",
 
             "css": "css",
             "js": "js",
@@ -73,6 +74,8 @@
         "file": {
             "grunt": "Gruntfile.js",
             "gulp": "gulpfile.js",
+
+            "template": "template.js",
 
             "css": "style.css",
             "js": "script.js",

@@ -394,6 +394,13 @@ module.exports = function(grunt) {
 // ##    ## ##    ##
 //  ######   ######
 
+        react: {
+            dev: {
+                src: app.folder.jsx +"/*.jsx",
+                dest: app.folder.js +"/app/"+ app.file.template
+            }
+        },
+
         jshint: {
             options: {
                 jshintrc: app.config.jshint,
@@ -524,7 +531,7 @@ module.exports = function(grunt) {
      *     - Remove all generated files
      *     - Insert bower files into slim templates
      */
-    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev"]);
+    grunt.registerTask("clear", ["clean:all", "bowerInstall:dev", "react:dev"]);
 
     /**
      * Init task:
