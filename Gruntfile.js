@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 
             stylus: {
                 files: app.folder.stylus +"/**/*.styl",
-                tasks: ["css-init", "autoprefixer:dev", "css-lint"]
+                tasks: ["css-init", "autoprefixer:dist", "css-lint"]
             },
 
             js: {
