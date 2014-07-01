@@ -11,6 +11,10 @@
   @include box-sizing(border-box);
 }
 
+body {
+    @include font-family;
+}
+
 a {
     color: inherit;
     text-decoration: none;

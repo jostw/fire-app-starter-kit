@@ -9,18 +9,31 @@
 
 @import "compass/typography";
 
-$base-font-size: 16px;
-$base-line-height: 24px;
-
 @include establish-baseline;
 
-// ##     ## #### ##     ## #### ##    ##
-// ###   ###  ##   ##   ##   ##  ###   ##
-// #### ####  ##    ## ##    ##  ####  ##
-// ## ### ##  ##     ###     ##  ## ## ##
-// ##     ##  ##    ## ##    ##  ##  ####
-// ##     ##  ##   ##   ##   ##  ##   ###
-// ##     ## #### ##     ## #### ##    ##
+// ########  #######  ##    ## ########
+// ##       ##     ## ###   ##    ##
+// ##       ##     ## ####  ##    ##
+// ######   ##     ## ## ## ##    ##
+// ##       ##     ## ##  ####    ##
+// ##       ##     ## ##   ###    ##
+// ##        #######  ##    ##    ##
+
+@mixin font-family {
+    font-family: $base-font-family;
+}
+
+@mixin font-size($size: $base-font-size) {
+    @include adjust-font-size-to($size);
+}
+
+// ######## ######## ##     ## ########
+//    ##    ##        ##   ##     ##
+//    ##    ##         ## ##      ##
+//    ##    ######      ###       ##
+//    ##    ##         ## ##      ##
+//    ##    ##        ##   ##     ##
+//    ##    ######## ##     ##    ##
 
 @mixin text-inline {
     white-space: nowrap;
@@ -37,20 +50,4 @@ $base-line-height: 24px;
     @include text-inline;
 
     text-overflow: ellipsis;
-}
-
-@mixin font-size($size: $base-font-size) {
-    @include adjust-font-size-to($size);
-}
-
-// ########  #######  ##    ## ########
-// ##       ##     ## ###   ##    ##
-// ##       ##     ## ####  ##    ##
-// ######   ##     ## ## ## ##    ##
-// ##       ##     ## ##  ####    ##
-// ##       ##     ## ##   ###    ##
-// ##        #######  ##    ##    ##
-
-body {
-    font-family: 微軟正黑體, sans-serif;
 }
