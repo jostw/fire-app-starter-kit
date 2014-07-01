@@ -11,6 +11,11 @@
   @include box-sizing(border-box);
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 ul {
     margin: 0;
     padding: 0;
