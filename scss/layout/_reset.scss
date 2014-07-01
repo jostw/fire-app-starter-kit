@@ -7,6 +7,10 @@
  * Licensed under the MIT license.
  */
 
+* {
+  @include box-sizing(border-box);
+}
+
 ul {
     margin: 0;
     padding: 0;
