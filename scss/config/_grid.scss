@@ -1,0 +1,36 @@
+/*
+ * hello-project
+ *
+ * https://github.com/jostw/hello-project
+ *
+ * Copyright (c) 2014 jos
+ * Licensed under the MIT license.
+ */
+
+$desktop-width: 1280px;
+$tablet-width: 768px;
+$mobile-width: 480px;
+$min-width: 320px;
+
+@mixin media($screen) {
+    @if $screen == "desktop" {
+        @media (max-width: $desktop-width) {
+            @content;
+        }
+    }
+    @else if $screen == "tablet" {
+        @media (max-width: $tablet-width) {
+            @content;
+        }
+    }
+    @else if $screen == "mobile" {
+        @media (max-width: $mobile-width) {
+            @content;
+        }
+    }
+    @else if $screen == "min" {
+        @media (max-width: $min-width) {
+            @content;
+        }
+    }
+}
