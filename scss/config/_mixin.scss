@@ -7,6 +7,18 @@
  * Licensed under the MIT license.
  */
 
+$base-size: 3em;
+
+@mixin inline-block {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+@mixin size($width: $base-size, $height: $width) {
+    width: $width;
+    height: $height;
+}
+
 @mixin border($color: $white15) {
     border: 1px solid $color;
 }
