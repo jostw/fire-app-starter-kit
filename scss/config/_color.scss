@@ -7,35 +7,6 @@
  * Licensed under the MIT license.
  */
 
-// ########  ##          ###     ######  ##    ##
-// ##     ## ##         ## ##   ##    ## ##   ##
-// ##     ## ##        ##   ##  ##       ##  ##
-// ########  ##       ##     ## ##       #####
-// ##     ## ##       ######### ##       ##  ##
-// ##     ## ##       ##     ## ##    ## ##   ##
-// ########  ######## ##     ##  ######  ##    ##
-
-$black: black;
-
-$black5:  lighten($black,  5%);
-$black10: lighten($black, 10%);
-$black15: lighten($black, 15%);
-$black20: lighten($black, 20%);
-$black25: lighten($black, 25%);
-$black30: lighten($black, 30%);
-$black35: lighten($black, 35%);
-$black40: lighten($black, 40%);
-$black45: lighten($black, 45%);
-$black50: lighten($black, 50%);
-
-// ##      ## ##     ## #### ######## ########
-// ##  ##  ## ##     ##  ##     ##    ##
-// ##  ##  ## ##     ##  ##     ##    ##
-// ##  ##  ## #########  ##     ##    ######
-// ##  ##  ## ##     ##  ##     ##    ##
-// ##  ##  ## ##     ##  ##     ##    ##
-//  ###  ###  ##     ## ####    ##    ########
-
 $white: white;
 
 $white5:  darken($white,  5%);
@@ -47,4 +18,17 @@ $white30: darken($white, 30%);
 $white35: darken($white, 35%);
 $white40: darken($white, 40%);
 $white45: darken($white, 45%);
-$white50: darken($white, 50%);
+
+$gray: gray;
+
+$black45: lighten($black, 45%);
+$black40: lighten($black, 40%);
+$black35: lighten($black, 35%);
+$black30: lighten($black, 30%);
+$black25: lighten($black, 25%);
+$black20: lighten($black, 20%);
+$black15: lighten($black, 15%);
+$black10: lighten($black, 10%);
+$black5:  lighten($black,  5%);
+
+$black: black;
