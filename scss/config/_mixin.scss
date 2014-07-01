@@ -9,9 +9,9 @@
 
 $base-size: 3em;
 
-@mixin inline-block {
+@mixin inline-block($align: bottom) {
     display: inline-block;
-    vertical-align: bottom;
+    vertical-align: $align;
 }
 
 @mixin size($width: $base-size, $height: $width) {
