@@ -1,0 +1,41 @@
+/*
+ * hello-project
+ *
+ * https://github.com/jostw/hello-project
+ *
+ * Copyright (c) 2014 jos
+ * Licensed under the MIT license.
+ */
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+button {
+    border: 0;
+    padding: 0;
+    background-color: inherit;
+
+    &:focus {
+        outline: 1px solid transparent;
+    }
+}
+
+.image {
+    overflow: hidden;
+    background-color: $white5;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.hidden {
+    display: none;
+}
