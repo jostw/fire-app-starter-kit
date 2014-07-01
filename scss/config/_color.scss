@@ -8,6 +8,7 @@
  */
 
 $white: white;
+$black: black;
 
 $white5:  darken($white,  5%);
 $white10: darken($white, 10%);
@@ -30,5 +31,3 @@ $black20: lighten($black, 20%);
 $black15: lighten($black, 15%);
 $black10: lighten($black, 10%);
 $black5:  lighten($black,  5%);
-
-$black: black;
