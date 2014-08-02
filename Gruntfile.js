@@ -609,7 +609,7 @@ module.exports = function(grunt) {
     ]);
 
     /**
-     * Min task::
+     * Min task:
      *     - Init task
      *     - Usemin prepare
      *     - Compress css file
