@@ -1,11 +1,24 @@
 {
   "name": "hello-project",
   "version": "0.0.1",
-  "author": "jos",
+  "homepage": "https://github.com/jostw/hello-project",
+  "authors": [
+    "jos <mail@jos.tw>"
+  ],
+  "description": "Frontend Project Initializer",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "html5shiv": null,
-    "respond": null,
-    "normalize.css": "~3.0.1",
-    "react": "~0.10.0"
+    "html5shiv": "latest",
+    "respond": "latest",
+    "normalize.css": "latest",
+    "modernizr": "latest",
+    "react": "latest"
   }
 }
