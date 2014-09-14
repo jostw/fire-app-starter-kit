@@ -3,3 +3,9 @@ sftp-config.json
 
 # Compass
 .sass-cache/
+
+# Bower
+bower_components/
+
+# Grunt
+node_modules/
