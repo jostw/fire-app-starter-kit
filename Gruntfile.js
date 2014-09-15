@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 files: [
                     app.folder.scss +"/**/*.scss",
                     app.folder.stylus +"/**/*.styl"
-                ]
+                ],
 
                 tasks: ["css"]
             },
@@ -366,7 +366,7 @@ module.exports = function(grunt) {
     grunt.registerTask("js", [
         "jshint:dev",
         "react:dev",
-        "browserify:dev"
+        "browserify:dev",
         "copy:js"
     ]);
 
