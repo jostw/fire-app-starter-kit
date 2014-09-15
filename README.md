@@ -1,4 +1,4 @@
 hello-project
 =============
 
-Project initializer
+Frontend Project Initializer
