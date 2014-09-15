@@ -9,3 +9,9 @@ bower_components/
 
 # Grunt
 node_modules/
+
+# Other
+css/style.css
+js/script.js
+js/app/template.js
+js/vendor/

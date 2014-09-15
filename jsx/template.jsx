@@ -3,7 +3,7 @@
 var HelloReact = React.createClass({
     render: function() {
         return (
-            <h2>Hello React</h2>
+            <h2>Hello React!</h2>
         );
     }
 });

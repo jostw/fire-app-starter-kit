@@ -13,12 +13,12 @@
             "csslint": ".csslintrc",
             "jshint": ".jshintrc",
 
-            "clean": {
-                "force": true
+            "watch": {
+                "livereload": true
             },
 
-            "slim": {
-                "pretty": true
+            "clean": {
+                "force": true
             },
 
             "stylus": {
@@ -31,13 +31,13 @@
                 "length": 8
             },
 
-            "uglify": {
-                "preserveComments": "some"
-            },
-
             "htmlmin": {
                 "removeComments": true,
                 "collapseWhitespace": true
+            },
+
+            "uglify": {
+                "preserveComments": "some"
             }
         },
 
@@ -53,68 +53,42 @@
             "css": "css",
             "js": "js",
 
-            "template": "template",
-            "partial": "partial",
-
             "vendor": "vendor",
             "temp": ".tmp",
 
             "dist": "dist"
         },
 
-        "template": {
-            "style": "_style.html.slim",
-            "script": "_script.html.slim",
-
-            "head": "_head.html.slim",
-            "main": "_main.html.slim",
-            "foot": "_foot.html.slim",
-
-            "livereload": "_livereload.html.slim"
-        },
-
         "file": {
             "grunt": "Gruntfile.js",
             "gulp": "gulpfile.js",
 
-            "app": "app.js",
             "template": "template.js",
 
             "css": "style.css",
             "js": "script.js",
 
-            "style": "style.html",
-            "script": "script.html",
-
-            "head": "head.html",
-            "main": "main.html",
-            "foot": "foot.html",
-
-            "livereload": "livereload.html",
-
             "index": "index.html"
         },
 
-        "vendor": {
-            "html5shiv": {
-                "path": "html5shiv/dist/",
-                "file": "html5shiv.js"
-            },
-
-            "respond": {
-                "path": "respond/dest/",
+        "vendor": [
+            {
+                "folder": "html5shiv/dist",
+                "file": "html5shiv.min.js"
+            }, {
+                "folder": "respond/dest",
                 "file": "respond.min.js"
-            },
+            }, {
+                "folder": "jquery/dist",
+                "file": "jquery.min.js"
+            }
+        ],
 
-            "validation": "validation-status.json"
-        },
-
-        "regex": {
-            "html5shiv": "html5shiv",
-            "respond": "respond",
-
-            "index": "index",
-            "main": "main"
-        }
+        "exclude": [
+            "html5shiv",
+            "respond",
+            "modernizr",
+            "jquery"
+        ]
     }
 }

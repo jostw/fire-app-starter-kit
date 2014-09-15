@@ -1,6 +1,10 @@
 {
     "compatible-vendor-prefixes": false,
-    "universal-selector": false,
-    "box-sizing": false,
-    "box-model": false
+    "box-model":                  false,
+    "star-property-hack":         false,
+    "duplicate-properties":       false,
+    "universal-selector":         false,
+    "box-sizing":                 false,
+    "adjoining-classes":          false,
+    "font-sizes":                 false
 }
