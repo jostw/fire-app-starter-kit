@@ -7,10 +7,6 @@
  * Licensed under the MIT license.
  */
 
-@import "compass/typography";
-
-@include establish-baseline;
-
 // ########  #######  ##    ## ########
 // ##       ##     ## ###   ##    ##
 // ##       ##     ## ####  ##    ##
@@ -23,8 +19,9 @@
     font-family: $base-font-family;
 }
 
-@mixin font-size($size: $base-font-size) {
-    @include adjust-font-size-to($size);
+@mixin font-size($font-size: $base-font-size, $line-height: $font-size * 1.5) {
+    font-size:   $font-size / $base-font-size + em;
+    line-height: $line-height;
 }
 
 // ######## ######## ##     ## ########

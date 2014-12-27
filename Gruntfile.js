@@ -37,8 +37,7 @@ module.exports = function(grunt) {
 
             css: {
                 files: [
-                    app.folder.scss +"/**/*.scss",
-                    app.folder.stylus +"/**/*.styl"
+                    app.folder.scss +"/**/*.scss"
                 ],
 
                 tasks: ["css"]
@@ -229,20 +228,11 @@ module.exports = function(grunt) {
 // ##    ## ##    ## ##    ##
 //  ######   ######   ######
 
-        compass: {
+        sass: {
             dev: {
-                options: {
-                    config: app.config.compass
+                files: {
+                    "css/style.css": "scss/style.scss"
                 }
-            }
-        },
-
-        stylus: {
-            options: app.config.stylus,
-
-            dev: {
-                src: app.folder.stylus +"/**/*.styl",
-                dest: app.folder.css +"/"+ app.file.css
             }
         },
 
@@ -329,12 +319,6 @@ module.exports = function(grunt) {
 
     require("load-grunt-tasks")(grunt);
 
-    /**
-     * Usage: grunt [task] [--pre=stylus]
-     *     - Use compass as default preprocessor
-     */
-    var preprocessor = grunt.option("pre") || app.preprocessor;
-
     grunt.registerTask("reset", [
         "jshint:grunt",
 
@@ -349,19 +333,12 @@ module.exports = function(grunt) {
         "htmlmin:dev"
     ]);
 
-    grunt.registerTask("css", (function() {
-        var _tasks = [
-            preprocessor +":dev",
-            "csslint:dev",
-            "copy:css"
-        ];
-
-        if(preprocessor === "stylus") {
-            _tasks.push("autoprefixer:dev");
-        }
-
-        return _tasks;
-    })());
+    grunt.registerTask("css", [
+        "sass:dev",
+        "csslint:dev",
+        "copy:css",
+        "autoprefixer:dev"
+    ]);
 
     grunt.registerTask("js", [
         "jshint:dev",
