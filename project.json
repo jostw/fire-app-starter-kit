@@ -7,8 +7,6 @@
             "bower": ".bowerrc",
             "grunt": "package.json",
 
-            "compass": "config.rb",
-
             "htmlhint": ".htmlhintrc",
             "csslint": ".csslintrc",
             "jshint": ".jshintrc",
@@ -19,10 +17,6 @@
 
             "clean": {
                 "force": true
-            },
-
-            "stylus": {
-                "compress": false
             },
 
             "rev": {
@@ -41,13 +35,10 @@
             }
         },
 
-        "preprocessor": "compass",
-
         "folder": {
             "app": "app",
 
             "scss": "scss",
-            "stylus": "stylus",
             "jsx": "jsx",
 
             "css": "css",
