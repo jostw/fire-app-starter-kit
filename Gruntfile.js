@@ -48,7 +48,6 @@ module.exports = function(grunt) {
                     app.folder.jsx +"/**/*.jsx",
                     app.folder.js +"/**/*.js",
                     "!"+ app.folder.js +"/"+ app.file.js,
-                    "!"+ app.folder.js +"/"+ app.folder.app +"/"+ app.file.template,
                     "!"+ app.folder.js +"/"+ app.folder.vendor +"/*.js"
                 ],
 
@@ -274,16 +273,8 @@ module.exports = function(grunt) {
                 src: [
                     app.folder.js +"/**/*.js",
                     "!"+ app.folder.js +"/"+ app.file.js,
-                    "!"+ app.folder.js +"/"+ app.folder.app +"/"+ app.file.template,
                     "!"+ app.folder.js +"/"+ app.folder.vendor +"/*.js"
                 ]
-            }
-        },
-
-        react: {
-            dev: {
-                src: app.folder.jsx +"/**/*.jsx",
-                dest: app.folder.js +"/"+ app.folder.app +"/"+ app.file.template
             }
         },
 
@@ -342,7 +333,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask("js", [
         "jshint:dev",
-        "react:dev",
         "browserify:dev",
         "copy:js"
     ]);

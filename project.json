@@ -54,8 +54,6 @@
             "grunt": "Gruntfile.js",
             "gulp": "gulpfile.js",
 
-            "template": "template.js",
-
             "css": "style.css",
             "js": "script.js",
 
