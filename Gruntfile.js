@@ -10,50 +10,32 @@
 "use strict";
 
 module.exports = function(grunt) {
-    var fs =  require("fs"),
-        app = require("./project.json").app;
+    var config = {
+        dist: "dist",
 
-    app.folder.bower = JSON.parse(fs.readFileSync(app.config.bower, "utf8")).directory;
+        vendor: [
+            {
+                folder: "html5shiv/dist",
+                file: "html5shiv.min.js"
+            }, {
+                folder: "respond/dest",
+                file: "respond.min.js"
+            }, {
+                folder: "jquery/dist",
+                file: "jquery.min.js"
+            }
+        ],
+
+        exclude: [
+            "html5shiv",
+            "respond",
+            "modernizr",
+            "jquery"
+        ]
+    };
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON(app.config.grunt),
-
-// ##      ##    ###    ########  ######  ##     ##
-// ##  ##  ##   ## ##      ##    ##    ## ##     ##
-// ##  ##  ##  ##   ##     ##    ##       ##     ##
-// ##  ##  ## ##     ##    ##    ##       #########
-// ##  ##  ## #########    ##    ##       ##     ##
-// ##  ##  ## ##     ##    ##    ##    ## ##     ##
-//  ###  ###  ##     ##    ##     ######  ##     ##
-
-        watch: {
-            options: app.config.watch,
-
-            html: {
-                files: app.file.index,
-
-                tasks: ["html"]
-            },
-
-            css: {
-                files: [
-                    app.folder.scss +"/**/*.scss"
-                ],
-
-                tasks: ["css"]
-            },
-
-            js: {
-                files: [
-                    app.folder.jsx +"/**/*.jsx",
-                    app.folder.js +"/**/*.js",
-                    "!"+ app.folder.js +"/"+ app.file.js,
-                    "!"+ app.folder.js +"/"+ app.folder.vendor +"/*.js"
-                ],
-
-                tasks: ["js"]
-            }
-        },
+        pkg: grunt.file.readJSON("package.json"),
 
 //  ######   #######  ########  ##    ##
 // ##    ## ##     ## ##     ##  ##  ##
@@ -66,43 +48,41 @@ module.exports = function(grunt) {
         copy: {
             vendor: {
                 files: (function() {
-                    var _files = [],
-                        _vendor = app.vendor,
-                        _length = _vendor.length;
+                    var files = [];
 
-                    for(var i = 0; i < _length; i++) {
-                        _files.push({
-                            src: app.folder.bower +"/"+ _vendor[i].folder +"/"+ _vendor[i].file,
-                            dest: app.folder.js +"/"+ app.folder.vendor +"/"+ _vendor[i].file
+                    config.vendor.map(function(vendor) {
+                        files.push({
+                            src: "bower_components/"+ vendor.folder +"/"+ vendor.file,
+                            dest: "js/vendor/"+ vendor.file
                         });
-                    }
+                    });
 
-                    return _files;
+                    return files;
                 })()
             },
 
             bower: {
                 src: [
-                    app.folder.bower +"/**/*.{css,js}",
-                    "!"+ app.folder.bower +"/{"+ app.exclude.join(",") +"}/**/*.{css,js}"
+                    "bower_components/**/*.{css,js}",
+                    "!bower_components/{"+ config.exclude.join(",") +"}/**/*.{css,js}"
                 ],
 
-                dest: app.folder.dist +"/"
+                dest: config.dist +"/"
             },
 
             css: {
-                src: app.folder.css +"/"+ app.file.css,
-                dest: app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css
+                src: "css/style.css",
+                dest: config.dist +"/css/style.css"
             },
 
             js: {
                 files: [
                     {
-                        src: app.folder.js +"/"+ app.file.js,
-                        dest: app.folder.dist +"/"+ app.folder.js +"/"+ app.file.js
+                        src: "js/script/js",
+                        dest: config.dist +"/js/script.js"
                     }, {
-                        src: app.folder.js +"/"+ app.folder.vendor +"/*.js",
-                        dest: app.folder.dist +"/"
+                        src: "js/vendor/*.js",
+                        dest: config.dist +"/"
                     }
                 ]
             }
@@ -117,23 +97,25 @@ module.exports = function(grunt) {
 //  ######  ######## ######## ##     ## ##    ##
 
         clean: {
-            options: app.config.clean,
+            options: {
+                force: true
+            },
 
             dist: {
                 src: [
-                    app.folder.dist +"/"+ app.file.index,
-                    app.folder.dist +"/"+ app.folder.bower,
-                    app.folder.dist +"/"+ app.folder.css,
-                    app.folder.dist +"/"+ app.folder.js
+                    config.dist +"/index.html",
+                    config.dist +"/bower_components/",
+                    config.dist +"/css/",
+                    config.dist +"/js/"
                 ]
             },
 
             temp: {
-                src: app.folder.temp
+                src: ".tmp/"
             },
 
             bower: {
-                src: app.folder.dist +"/"+ app.folder.bower
+                src: config.dist +"/bower_components/"
             }
         },
 
@@ -146,12 +128,16 @@ module.exports = function(grunt) {
 // ##     ## ########    ###
 
         rev: {
-            options: app.config.rev,
+            options: {
+                encoding: "utf8",
+                algorithm: "md5",
+                length: 8
+            },
 
             dist: {
                 src: [
-                    app.folder.dist +"/"+ app.folder.css +"/"+ app.file.css,
-                    app.folder.dist +"/"+ app.folder.js  +"/"+ app.file.js
+                    config.dist +"/css/style.css",
+                    config.dist +"/js/script.js"
                 ]
             }
         },
@@ -166,18 +152,18 @@ module.exports = function(grunt) {
 
         useminPrepare: {
             options: {
-                dest: app.folder.dist
+                dest: config.dist
             },
 
-            html: app.folder.dist +"/"+ app.file.index
+            html: config.dist +"/index.html"
         },
 
         usemin: {
             options: {
-                assetsDirs: app.folder.dist
+                assetsDirs: config.dist
             },
 
-            html: app.folder.dist +"/"+ app.file.index
+            html: config.dist +"/index.html"
         },
 
 // ##     ## ######## ##     ## ##
@@ -190,32 +176,35 @@ module.exports = function(grunt) {
 
         wiredep: {
             dev: {
-                src: app.file.index,
-                exclude: app.exclude
+                src: "index.html",
+                exclude: config.exclude
             }
         },
 
         htmlhint: {
             options: {
-                htmlhintrc: app.config.htmlhint
+                htmlhintrc: ".htmlhintrc"
             },
 
             dev: {
-                src: app.file.index
+                src: "index.html"
             }
         },
 
         htmlmin: {
             dev: {
-                src: app.file.index,
-                dest: app.folder.dist +"/"+ app.file.index
+                src: "index.html",
+                dest: config.dist +"/index.html"
             },
 
             dist: {
-                options: app.config.htmlmin,
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
 
-                src: app.folder.dist  +"/"+ app.file.index,
-                dest: app.folder.dist +"/"+ app.file.index
+                src: config.dist  +"/index.html",
+                dest: config.dist +"/index.html"
             }
         },
 
@@ -237,17 +226,17 @@ module.exports = function(grunt) {
 
         autoprefixer: {
             dev: {
-                src: app.folder.dist +"/"+ app.folder.css +"/**/*.css"
+                src: config.dist +"/css/**/*.css"
             }
         },
 
         csslint: {
             options: {
-                csslintrc: app.config.csslint
+                csslintrc: ".csslintrc"
             },
 
             dev: {
-                src: app.folder.css +"/"+ app.file.css
+                src: "css/style.css"
             }
         },
 
@@ -261,19 +250,19 @@ module.exports = function(grunt) {
 
         jshint: {
             options: {
-                jshintrc: app.config.jshint,
+                jshintrc: ".jshintrc",
                 reporter: require("jshint-stylish")
             },
 
             grunt: {
-                src: app.file.grunt
+                src: "Gruntfile.js"
             },
 
             dev: {
                 src: [
-                    app.folder.js +"/**/*.js",
-                    "!"+ app.folder.js +"/"+ app.file.js,
-                    "!"+ app.folder.js +"/"+ app.folder.vendor +"/*.js"
+                    "js/**/*.js",
+                    "!js/script.js",
+                    "!js/vendor/*.js"
                 ]
             }
         },
@@ -281,21 +270,57 @@ module.exports = function(grunt) {
         browserify: {
             dev: {
                 src: [
-                    app.folder.js +"/**/*.js",
-                    "!"+ app.folder.js +"/"+ app.file.js,
-                    "!"+ app.folder.js +"/"+ app.folder.vendor +"/*.js"
+                    "js/**/*.js",
+                    "!js/script.js",
+                    "!js/vendor/*.js"
                 ],
 
-                dest: app.folder.js +"/"+ app.file.js
+                dest: "js/script.js"
             }
         },
 
         uglify: {
-            options: app.config.uglify,
+            options: {
+                preserveComments: "some"
+            },
 
             modernizr: {
-                src: app.folder.bower +"/modernizr/modernizr.js",
-                dest: app.folder.js +"/"+ app.folder.vendor +"/modernizr.min.js"
+                src: "bower_components/modernizr/modernizr.js",
+                dest: "js/vendor/modernizr.min.js"
+            }
+        },
+
+// ##      ##    ###    ########  ######  ##     ##
+// ##  ##  ##   ## ##      ##    ##    ## ##     ##
+// ##  ##  ##  ##   ##     ##    ##       ##     ##
+// ##  ##  ## ##     ##    ##    ##       #########
+// ##  ##  ## #########    ##    ##       ##     ##
+// ##  ##  ## ##     ##    ##    ##    ## ##     ##
+//  ###  ###  ##     ##    ##     ######  ##     ##
+
+        watch: {
+            options: {
+                livereload: true
+            },
+
+            html: {
+                files: "index.html",
+                tasks: ["html"]
+            },
+
+            css: {
+                files: "scss/**/*.scss",
+                tasks: ["css"]
+            },
+
+            js: {
+                files: [
+                    "js/**/*.js",
+                    "!js/script.js",
+                    "!js/vendor/*.js"
+                ],
+
+                tasks: ["js"]
             }
         }
     });
@@ -346,16 +371,6 @@ module.exports = function(grunt) {
         "js"
     ]);
 
-    grunt.registerTask("set", [
-        "reset",
-
-        "wiredep:dev",
-
-        "jshint:dev",
-        "react:dev",
-        "browserify:dev"
-    ]);
-
     grunt.registerTask("default", [
         "init",
         "watch"
@@ -375,7 +390,6 @@ module.exports = function(grunt) {
 
         "htmlmin:dist",
         "clean:temp",
-
         "clean:bower"
     ]);
 };
