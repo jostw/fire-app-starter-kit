@@ -78,7 +78,7 @@ module.exports = function(grunt) {
             js: {
                 files: [
                     {
-                        src: "js/script/js",
+                        src: "js/script.js",
                         dest: config.dist +"/js/script.js"
                     }, {
                         src: "js/vendor/*.js",
@@ -216,10 +216,10 @@ module.exports = function(grunt) {
 // ##    ## ##    ## ##    ##
 //  ######   ######   ######
 
-        sass: {
+        compass: {
             dev: {
-                files: {
-                    "css/style.css": "scss/style.scss"
+                options: {
+                    config: "config.rb"
                 }
             }
         },
@@ -350,7 +350,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("css", [
-        "sass:dev",
+        "compass:dev",
         "csslint:dev",
         "copy:css",
         "autoprefixer:dev"
