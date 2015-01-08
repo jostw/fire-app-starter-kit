@@ -8,8 +8,14 @@
  */
 
 @import "config/config";
-@import "component/component";
-@import "layout/layout";
+@import "config/color";
+@import "config/grid";
+@import "config/typography";
+@import "config/mixin";
+
+@import "component/clearfix";
+
+@import "layout/reset";
 
 .hello-project {
     text-align: center;

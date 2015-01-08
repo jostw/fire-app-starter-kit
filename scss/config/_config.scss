@@ -7,8 +7,6 @@
  * Licensed under the MIT license.
  */
 
-@import "color";
-
 //  ######   ########  #### ########
 // ##    ##  ##     ##  ##  ##     ##
 // ##        ##     ##  ##  ##     ##
@@ -22,8 +20,6 @@ $tablet-width:   768px;
 $mobile-width:   480px;
 $min-width:      320px;
 
-@import "grid";
-
 // ######## ##    ## ########   #######   ######   ########     ###    ########  ##     ## ##    ##
 //    ##     ##  ##  ##     ## ##     ## ##    ##  ##     ##   ## ##   ##     ## ##     ##  ##  ##
 //    ##      ####   ##     ## ##     ## ##        ##     ##  ##   ##  ##     ## ##     ##   ####
@@ -35,8 +31,6 @@ $min-width:      320px;
 $base-font-size: 16px;
 $base-font-family: 微軟正黑體, sans-serif;
 
-@import "typography";
-
 // ##     ## #### ##     ## #### ##    ##
 // ###   ###  ##   ##   ##   ##  ###   ##
 // #### ####  ##    ## ##    ##  ####  ##
@@ -47,5 +41,3 @@ $base-font-family: 微軟正黑體, sans-serif;
 
 $base-size: 4em;
 $inline-block-alignment: top;
-
-@import "mixin";
