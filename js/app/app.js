@@ -1,16 +1,12 @@
 /*
- * hello-project
+ * fire-app-starter-kit
  *
- * https://github.com/jostw/hello-project
+ * https://github.com/jostw/fire-app-starter-kit
  *
- * Copyright (c) 2014 jos
+ * Copyright (c) 2015 jos
  * Licensed under the MIT license.
  */
 
 "use strict";
 
-(function() {
-
-    console.log("Hello Project!");
-
-})();
+require("./plugins");

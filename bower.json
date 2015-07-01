@@ -1,11 +1,15 @@
 {
-  "name": "hello-project",
-  "version": "0.0.1",
-  "homepage": "https://github.com/jostw/hello-project",
+  "name": "fire-app-starter-kit",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jostw/fire-app-starter-kit",
   "authors": [
     "jos <mail@jos.tw>"
   ],
-  "description": "Frontend Project Initializer",
+  "main": "app.js",
+  "description": "A starter kit for both Fire.app and npm modules.",
+  "keywords": [
+    "fire.app"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -17,8 +21,7 @@
   "dependencies": {
     "html5shiv": "~3.7.2",
     "respond": "~1.4.2",
-    "normalize.css": "~3.0.1",
     "modernizr": "~2.8.3",
-    "jquery": "~1.11.1"
+    "normalize.css": "~3.0.3"
   }
 }

@@ -1,16 +1,8 @@
-# Sublime Text
-sftp-config.json
-
-# Compass
+.DS_Store
 .sass-cache/
 
-# Bower
+node_modules/
 bower_components/
 
-# Grunt
-node_modules/
-
-# Other
-css/style.css
-js/script.js
-js/vendor/
+npm-debug.log
+fire_app_log.txt

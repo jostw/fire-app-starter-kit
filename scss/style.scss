@@ -1,22 +1,11 @@
 /*
- * hello-project
+ * fire-app-starter-kit
  *
- * https://github.com/jostw/hello-project
+ * https://github.com/jostw/fire-app-starter-kit
  *
- * Copyright (c) 2014 jos
+ * Copyright (c) 2015 jos
  * Licensed under the MIT license.
  */
 
-@import "config/config";
-@import "config/color";
-@import "config/grid";
-@import "config/typography";
-@import "config/mixin";
-
-@import "component/clearfix";
-
-@import "layout/reset";
-
-.hello-project {
-    text-align: center;
-}
+@import "vendor/normalize";
+@import "vendor/boilerplate";

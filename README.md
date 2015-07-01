@@ -1,4 +1,4 @@
-hello-project
+Fire.app Starter Kit
 =============
 
-Frontend Project Initializer
+A starter kit for both Fire.app and npm modules.
