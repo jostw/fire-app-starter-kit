@@ -6,7 +6,7 @@
     "jos <mail@jos.tw>"
   ],
   "main": "app.js",
-  "description": "A starter kit for both Fire.app and npm modules.",
+  "description": "Starter kit for both Fire.app and Grunt.",
   "keywords": [
     "fire.app"
   ],

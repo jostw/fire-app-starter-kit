@@ -1,7 +1,7 @@
 {
   "name": "fire-app-starter-kit",
   "version": "0.1.0",
-  "description": "A starter kit for both Fire.app and npm modules.",
+  "description": "Starter kit for both Fire.app and Grunt.",
   "main": "app.js",
   "scripts": {
     "postinstall": "bower install && grunt copy:vendor && grunt uglify:modernizr",
