@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "postinstall": "bower install && grunt copy:vendor && grunt uglify:modernizr",
-    "start": "grunt server",
+    "start": "npm install && grunt server",
     "build": "npm install && grunt build"
   },
   "repository": {
