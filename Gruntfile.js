@@ -13,11 +13,16 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
 
-        watch: {
-            options: {
-                livereload: 35729
-            },
+        connect: {
+            server: {
+                options: {
+                    port: 24681,
+                    livereload: 35729
+                }
+            }
+        },
 
+        watch: {
             html: {
                 files: "*.html",
                 tasks: "build:html"
@@ -126,6 +131,11 @@ module.exports = function(grunt) {
     });
 
     require("load-grunt-tasks")(grunt);
+
+    grunt.registerTask("server", [
+        "connect:server",
+        "watch"
+    ]);
 
     grunt.registerTask("build:html", [
         "htmlhint"
