@@ -8,7 +8,10 @@
   "main": "app.js",
   "description": "Starter kit for both Fire.app and Grunt.",
   "keywords": [
-    "fire.app"
+    "fire.app",
+    "grunt",
+    "compass",
+    "browserify"
   ],
   "license": "MIT",
   "ignore": [

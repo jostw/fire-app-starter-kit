@@ -13,7 +13,10 @@
     "url": "https://github.com/jostw/fire-app-starter-kit.git"
   },
   "keywords": [
-    "fire.app"
+    "fire.app",
+    "grunt",
+    "compass",
+    "browserify"
   ],
   "author": "jos",
   "license": "MIT",
