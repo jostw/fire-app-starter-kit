@@ -108,11 +108,26 @@ module.exports = function(grunt) {
 
         eslint: {
             target: [
+                "Gruntfile.js",
                 "js/**/*.js",
+                "!js/script.js",
                 "!js/app/plugins.js",
-                "!js/vendor/*.js",
-                "!js/script.js"
+                "!js/vendor/*.js"
             ]
+        },
+
+        jscs: {
+            src: [
+                "Gruntfile.js",
+                "js/**/*.js",
+                "!js/script.js",
+                "!js/app/plugins.js",
+                "!js/vendor/*.js"
+            ],
+
+            options: {
+                config: ".jscsrc"
+            }
         },
 
         browserify: {
@@ -159,6 +174,7 @@ module.exports = function(grunt) {
     grunt.registerTask("build:js", [
         "jshint",
         "eslint",
+        "jscs",
         "browserify:app",
         "uglify:script"
     ]);
