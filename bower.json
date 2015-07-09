@@ -5,8 +5,8 @@
   "authors": [
     "jos <mail@jos.tw>"
   ],
-  "main": "app.js",
   "description": "Starter kit for both Fire.app and Grunt.",
+  "main": "app.js",
   "keywords": [
     "fire.app",
     "grunt",
