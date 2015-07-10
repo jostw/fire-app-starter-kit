@@ -1,5 +1,7 @@
 {
-    "preset"                : "google",
-    "validateIndentation"   : 4,
-    "validateQuoteMarks"    : "\""
+    "preset"                            : "google",
+    "validateIndentation"               : 4,
+    "validateQuoteMarks"                : "\"",
+    "maximumLineLength"                 : 150,
+    "disallowSpacesInsideObjectBrackets": null
 }
