@@ -22,11 +22,11 @@ git clone https://github.com/jostw/fire-app-starter-kit.git
 
 1. For Fire.app development, just use Fire.app to watch the folder and start building your apps.
 
-2. For Grunt development, [Node.js](https://nodejs.org/) and Compass are required.
+2. For Grunt development, make sure [Node.js](https://nodejs.org/) and Compass are installed properly.
 
 - Use ``` npm start ``` for watching files and developing with a static server.
 
-- Use ``` npm run build ``` for minification.
+- Use ``` npm run build ``` for production.
 
 ## Contribute
 
