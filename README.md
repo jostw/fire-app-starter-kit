@@ -24,7 +24,7 @@ git clone https://github.com/jostw/fire-app-starter-kit.git
 
 2. For Grunt development, make sure [Node.js](https://nodejs.org/) and Compass are installed properly.
 
-- Use ` npm start ` for watching files and developing with a static server.
+- Use ` npm start ` for watching files and developing with a static server at ` http://localhost:24681 `.
 
 - Use ` npm run build ` for production.
 
